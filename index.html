@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Black Dot Inspection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <h1>BLACK DOT INSPECTION</h1>
+    <p class="subtitle">Control vizual industrial</p>
+
+    <section class="camera-box">
+      <video id="camera" autoplay playsinline muted></video>
+      <div id="target"></div>
+      <div id="cameraMessage">Camera este oprita</div>
+    </section>
+
+    <div id="status" class="status idle">
+      ASTEPTARE
+    </div>
+
+    <div class="buttons">
+      <button id="startBtn">START CAMERA</button>
+      <button id="stopBtn">STOP CAMERA</button>
+    </div>
+
+    <section class="stats">
+      <div>
+        <strong id="total">0</strong>
+        <span>Total piese</span>
+      </div>
+      <div>
+        <strong id="okCount">0</strong>
+        <span>OK</span>
+      </div>
+      <div>
+        <strong id="nokCount">0</strong>
+        <span>NOK</span>
+      </div>
+    </section>
+
+    <p class="footer">BlackDotInspection - Versiunea 1.0</p>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
