@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Black Dot Inspection</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,19 +11,32 @@
     <h1>BLACK DOT INSPECTION</h1>
     <p class="subtitle">Control vizual industrial</p>
 
-    <section class="camera-box">
+    <section class="camera-box" id="cameraBox">
       <video id="camera" autoplay playsinline muted></video>
       <div id="target"></div>
       <div id="cameraMessage">Camera este oprita</div>
     </section>
 
-    <div id="status" class="status idle">
-      ASTEPTARE
-    </div>
+    <div id="status" class="status idle">ASTEPTARE</div>
 
-    <div class="buttons">
+    <div class="buttons two">
       <button id="startBtn">START CAMERA</button>
       <button id="stopBtn">STOP CAMERA</button>
+    </div>
+
+    <div class="buttons two">
+      <button id="setRoiBtn">SET ROI</button>
+      <button id="savePresentBtn">CAL PREZENT</button>
+    </div>
+
+    <div class="buttons two">
+      <button id="saveAbsentBtn">CAL ABSENT</button>
+      <button id="checkNowBtn">VERIFICA ACUM</button>
+    </div>
+
+    <div class="buttons two">
+      <button id="toggleAutoBtn">AUTO INSPECT OFF</button>
+      <button id="resetBtn">RESET CONTOARE</button>
     </div>
 
     <section class="stats">
@@ -43,8 +54,19 @@
       </div>
     </section>
 
-    <p class="footer">BlackDotInspection - Versiunea 1.0</p>
+    <section class="info-panel">
+      <div><strong>Mod:</strong> <span id="modeLabel">Manual</span></div>
+      <div><strong>ROI:</strong> <span id="roiLabel">80 x 80</span></div>
+      <div><strong>Scor PREZENT:</strong> <span id="presentScore">-</span></div>
+      <div><strong>Scor ABSENT:</strong> <span id="absentScore">-</span></div>
+      <div><strong>Decizie:</strong> <span id="decisionLabel">-</span></div>
+    </section>
+
+    <canvas id="workCanvas" width="64" height="64" hidden></canvas>
+
+    <p class="footer">BlackDotInspection - Versiunea 2.0</p>
   </main>
+
   <script src="app.js"></script>
 </body>
 </html>
