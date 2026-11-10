@@ -1,0 +1,31 @@
+BLACK DOT INSPECTION V3 BETA - TEST
+
+1. Inlocuieste index.html, style.css, app.js in folderul BlackDotInspection de pe Desktop.
+2. Incarca aceleasi trei fisiere in repository GitHub existent (Add file > Upload files > Commit changes).
+3. Asteapta publicarea Pages, redeschide aplicatia in Safari si reincarca pagina.
+4. Apasa START CAMERA si fixeaza telefonul.
+5. Opreste AUTO, apoi MARCHEAZA PIESA: traseaza o zona in care piesa apare, dar cand lipseste se vede banda.
+   Aceasta zona este folosita si ca arie de cautare in modul ORIUNDE, deci ideal cuprinde piesa intreaga.
+6. Cu banda goala si fara piesa apasa CAL BANDA GOALA.
+7. Cu piesa oprita in cadru apasa CAL PIESA PREZENTA.
+8. MARCHEAZA BULINA: traseaza un dreptunghi strans in jurul marcajului, cu margine mica de fundal.
+9. Cu bulina prezenta apasa CAL BULINA PREZENTA.
+10. Cu o piesa fara bulina in aceeasi pozitie apasa CAL BULINA ABSENTA.
+11. Testeaza VERIFICA ACUM pe piese bune si proaste. Modul ORIUNDE cauta in zona PIESA.
+12. Porneste AUTO INSPECT si testeaza minimum 20 de piese cu opriri de 1-7 secunde.
+    Noteaza numarari ratate, dublate, false OK si false NOK.
+13. Cand schimbi zona bulinei, opreste AUTO, muta zona, recalibreaza PREZENTA si ABSENTA,
+    apoi reporneste AUTO. Contoarele nu se reseteaza.
+14. SALVEAZA SETARI pastreaza calibrarea si contoarele in Safari pe acel dispozitiv,
+    cat timp datele acelui site nu sunt sterse.
+
+LIMITARI IMPORTANTE:
+- Este un prototip de test, nu un sistem industrial validat. Nu se foloseste in productie
+  pentru eliberare automata de piese pana la validare.
+- Modul ORIUNDE foloseste potrivire de tipar vizual, nu detectie AI a tuturor formelor posibile.
+- Daca suprafata variaza, piesa se misca sau banda este murdara, sunt posibile erori.
+- Pragurile se regleaza empiric; toleranta 0 nu reprezinta precizie dimensionala perfecta.
+- Analiza are rezolutie de lucru 320 x 240, distincta de rezolutia camerei iPhone.
+- Marcajele cu dimensiune foarte mica pot necesita cresterea rezolutiei de analiza.
+- Daca o piesa trece prea repede pentru doua cadre consecutive, poate fi omisa.
+- Numai inspectiile automate incrementeaza contoarele.
