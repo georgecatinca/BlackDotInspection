@@ -1,6 +1,7 @@
 BLACK DOT INSPECTION V3 BETA - TEST
 
 1. Inlocuieste index.html, style.css, app.js in folderul BlackDotInspection de pe Desktop.
+https://github.com/georgecatinca/BlackDotInspection
 2. Incarca aceleasi trei fisiere in repository GitHub existent (Add file > Upload files > Commit changes).
 3. Asteapta publicarea Pages, redeschide aplicatia in Safari si reincarca pagina.
 4. Apasa START CAMERA si fixeaza telefonul.
