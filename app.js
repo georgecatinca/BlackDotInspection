@@ -13,7 +13,7 @@ let total=0,ok=0,nok=0,lastDecision='',machine='WAIT',seen=0,gone=0,arrivedAt=0;
 let lastFrame=null,lastFrameTime=0;
 const settings=['pieceTh','match','tol','size'];
 let recentScore=null;
-function say(msg){$('log').textContent=msg;}
+function say(msg){$('log').textContent=msg;$('mainLog').textContent=msg;}
 function status(msg,cls='idle'){$('result').textContent=msg;$('result').className='result '+cls;}
 function count(){total=ok+nok;$('total').textContent=total;$('ok').textContent=ok;$('nok').textContent=nok;}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
@@ -26,7 +26,19 @@ function extract(img,r,outW=0,outH=0){r=normRect(r);outW=outW||r.w;outH=outH||r.
 const PW=64,PH=64;
 function avgDiff(a,b){if(!a||!b||a.length!==b.length)return Infinity;let sum=0;for(let i=0;i<a.length;i++)sum+=Math.abs(a[i]-b[i]);return sum/a.length;}
 function correlation(a,b){if(!a||!b||a.length!==b.length)return -1;let ma=0,mb=0;for(let i=0;i<a.length;i++){ma+=a[i];mb+=b[i];}ma/=a.length;mb/=b.length;let num=0,va=0,vb=0;for(let i=0;i<a.length;i++){let da=a[i]-ma,db=b[i]-mb;num+=da*db;va+=da*da;vb+=db*db;}if(va<1||vb<1)return -1;return num/Math.sqrt(va*vb);}
-function calState(){let s=[];if(!emptyRef)s.push('bandă goală');if(!pieceRef)s.push('piesă');if(!markRef)s.push('bulină prezentă');if(!absentRef)s.push('bulină absentă');$('cal').textContent=s.length?'Lipsesc: '+s.join(', '):'Completă';}
+function setState(id,ready,yes,no){const e=$(id);e.textContent=ready?yes:no;e.className='state '+(ready?'green':'amber');}
+function refreshIndicators(){const complete=!!(emptyRef&&pieceRef&&markRef&&absentRef);
+setState('emptyState',!!emptyRef,'✓ CALIBRATĂ','● NECALIBRATĂ');setState('pieceState',!!pieceRef,'✓ CALIBRATĂ','● NECALIBRATĂ');
+setState('markState',!!markRef,'✓ CALIBRATĂ','● NECALIBRATĂ');setState('absentState',!!absentRef,'✓ CALIBRATĂ','● NECALIBRATĂ');
+setState('cameraState',!!stream,'✓ PORNITĂ','● OPRITĂ');setState('autoState',auto,'✓ ACTIVĂ','● OPRITĂ');
+$('cameraChip').className='chip '+(stream?'green':'amber');$('cameraChip').textContent=stream?'✓ Cameră pornită':'● Cameră oprită';
+$('autoChip').className='chip '+(auto?'green':'amber');$('autoChip').textContent=auto?'✓ Auto activ':'● Auto oprit';
+$('calChip').className='chip '+(complete?'green':'amber');$('calChip').textContent=complete?'✓ Calibrare completă':'● Calibrare incompletă';
+$('overallDot').className='statusdot '+(complete&&stream?'green':'amber');
+}
+function calState(){let s=[];if(!emptyRef)s.push('bandă goală');if(!pieceRef)s.push('piesă');if(!markRef)s.push('bulină prezentă');if(!absentRef)s.push('bulină absentă');$('cal').textContent=s.length?'Lipsesc: '+s.join(', '):'Completă';refreshIndicators();}
+function persist(silent=true){try{localStorage.setItem('blackdot_v3',JSON.stringify({pieceRect,markRect,emptyRef,pieceRef,markRef,absentRef,ok,nok,values:Object.fromEntries(settings.map(id=>[id,$(id).value])),anywhere:$('anywhere').checked}));$('savedIndicator').textContent='✓ Setări salvate pe acest dispozitiv';$('savedIndicator').className='drawer-sub green-text';if(!silent)say('Setări, calibrări și contoare salvate pe acest dispozitiv.');return true;}catch(e){$('savedIndicator').textContent='● Eroare la salvare';$('savedIndicator').className='drawer-sub amber-text';if(!silent)say('Nu s-a putut salva: '+e.message);return false;}}
+
 function getPieceInfo(img){if(!emptyRef||!pieceRef)return null;const patch=extract(img,pieceRect,PW,PH);let de=avgDiff(patch,emptyRef),dp=avgDiff(patch,pieceRef),sep=avgDiff(emptyRef,pieceRef);$('diff').textContent=de.toFixed(1)+' / etalon '+sep.toFixed(1);if(sep<6)return {present:false,invalid:true};let threshold=sep*setting('pieceTh')/100;return {present:de>Math.max(3,threshold)&&dp<de*1.25,de,dp,sep};}
 const TW=24,TH=24;
 function patchAt(img,x,y,w,h){return extract(img,{x,y,w,h},TW,TH);}
@@ -49,8 +61,8 @@ $('score').textContent=best.score.toFixed(3)+' / absent '+absentScore.toFixed(3)
 recentScore=best;return {valid,...best,absentScore};}
 function inspect(img,automatic=false){if(!img){say('Camera nu oferă imagine.');return;}if(!markRef||!absentRef){status('NECALIBRAT','warning');say('Calibrează întâi bulina prezentă și absentă.');return;}const test=evaluateMark(img);if(!test){say('Verificare indisponibilă.');return;}
 const uncertain=test.score>=setting('match')-0.06&&!test.valid;
-if(test.valid){status('OK – BULINĂ PREZENTĂ','okresult');lastDecision='OK';if(automatic){ok++;count();}}
-else{status(uncertain?'NOK – VERIFICARE NECESARĂ':'NOK – BULINĂ LIPSĂ / INCORECTĂ',uncertain?'warning':'nokresult');lastDecision='NOK';if(automatic){nok++;count();}}
+if(test.valid){status('OK – BULINĂ PREZENTĂ','okresult');lastDecision='OK';ok++;count();persist();}
+else{status(uncertain?'NOK – VERIFICARE NECESARĂ':'NOK – BULINĂ LIPSĂ / INCORECTĂ',uncertain?'warning':'nokresult');lastDecision='NOK';nok++;count();persist();}
 say((automatic?'Automat: ':'Manual: ')+lastDecision+' · scor '+test.score.toFixed(3)+(uncertain?' · rezultat nesigur, clasificat NOK':''));return test;}
 function loop(){const img=capture();if(!img)return;lastFrame=img;lastFrameTime=Date.now();if(!auto)return;
 const info=getPieceInfo(img);if(!info){say('Pentru AUTO calibrează banda goală și piesa prezentă.');stopAuto();return;}if(info.invalid){status('CALIBRARE PIESĂ SLABĂ','warning');return;}
@@ -64,21 +76,26 @@ else if(Date.now()-arrivedAt>=180){inspect(img,true);machine='LOCKED';gone=0;}
 if(!info.present){gone++;if(gone>=2){machine='WAIT';gone=0;seen=0;status('AȘTEPTARE PIESĂ','idle');}}
 else gone=0;
 }}
-async function startCamera(){if(stream)return;if(!navigator.mediaDevices?.getUserMedia){status('HTTPS NECESAR','nokresult');return;}$('start').disabled=true;try{stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});video.srcObject=stream;await video.play();$('hint').textContent='Trasează zonele după ce pornește camera';status('CAMERA ACTIVĂ','running');timer=setInterval(loop,110);say('Camera pornită. Configurează cele două zone și calibrările.');}catch(e){status('EROARE CAMERA','nokresult');say(e.name+': '+e.message);$('start').disabled=false;}}
-function stopAuto(){auto=false;machine='WAIT';seen=0;gone=0;$('automatic').textContent='AUTO INSPECT: OFF';$('automatic').className='purple';}
-function stopCamera(){stopAuto();if(timer){clearInterval(timer);timer=null;}if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}video.pause();video.srcObject=null;$('start').disabled=false;status('CAMERA OPRITĂ','idle');}
-function calibration(kind){if(auto){say('Oprește AUTO înainte de calibrare.');return;}const img=capture();if(!img){say('Pornește camera întâi.');return;}if(kind==='empty'){emptyRef=extract(img,pieceRect,PW,PH);say('Referința BENZII GOALE salvată.');}if(kind==='piece'){pieceRef=extract(img,pieceRect,PW,PH);say('Referința PIESEI PREZENTE salvată.');}if(kind==='mark'){markRef=patchAt(img,markRect.x,markRect.y,markRect.w,markRect.h);say('Modelul BULINĂ PREZENTĂ salvat.');}if(kind==='absent'){absentRef=patchAt(img,markRect.x,markRect.y,markRect.w,markRect.h);say('Modelul BULINĂ ABSENTĂ salvat.');}calState();}
+async function startCamera(){if(stream)return;if(!navigator.mediaDevices?.getUserMedia){status('HTTPS NECESAR','nokresult');return;}$('start').disabled=true;try{stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});video.srcObject=stream;await video.play();$('hint').textContent='Trasează zonele după ce pornește camera';status('CAMERA ACTIVĂ','running');timer=setInterval(loop,110);refreshIndicators();say('Camera pornită. Configurează cele două zone și calibrările.');}catch(e){status('EROARE CAMERA','nokresult');say(e.name+': '+e.message);$('start').disabled=false;}}
+function stopAuto(){auto=false;machine='WAIT';seen=0;gone=0;$('automatic').textContent='AUTO INSPECT: OFF';$('automatic').className='purple';refreshIndicators();}
+function stopCamera(){stopAuto();if(timer){clearInterval(timer);timer=null;}if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}video.pause();video.srcObject=null;$('start').disabled=false;status('CAMERA OPRITĂ','idle');refreshIndicators();}
+function calibration(kind){if(auto){say('Oprește AUTO înainte de calibrare.');return;}const img=capture();if(!img){say('Pornește camera întâi.');return;}if(kind==='empty'){emptyRef=extract(img,pieceRect,PW,PH);say('Referința BENZII GOALE salvată.');}if(kind==='piece'){pieceRef=extract(img,pieceRect,PW,PH);say('Referința PIESEI PREZENTE salvată.');}if(kind==='mark'){markRef=patchAt(img,markRect.x,markRect.y,markRect.w,markRect.h);say('Modelul BULINĂ PREZENTĂ salvat.');}if(kind==='absent'){absentRef=patchAt(img,markRect.x,markRect.y,markRect.w,markRect.h);say('Modelul BULINĂ ABSENTĂ salvat.');}calState();persist();}
 function setRegion(kind){if(auto){say('Oprește AUTO ca să modifici zonele.');return;}drawMode=kind;$('hint').textContent=kind==='piece'?'Trasează pe imagine zona de detectare a piesei':'Trasează un dreptunghi strâns în jurul bulinei';}
 function toPoint(e){const r=overlay.getBoundingClientRect();return {x:clamp(Math.round((e.clientX-r.left)*W/r.width),0,W-1),y:clamp(Math.round((e.clientY-r.top)*H/r.height),0,H-1)};}
 overlay.addEventListener('pointerdown',e=>{if(!drawMode)return;overlay.setPointerCapture(e.pointerId);const p=toPoint(e);drawStart={...p,end:p};drawOverlay();});
 overlay.addEventListener('pointermove',e=>{if(!drawStart)return;drawStart.end=toPoint(e);drawOverlay();});
-overlay.addEventListener('pointerup',e=>{if(!drawStart)return;const p=toPoint(e),x=Math.min(drawStart.x,p.x),y=Math.min(drawStart.y,p.y),w=Math.abs(drawStart.x-p.x),h=Math.abs(drawStart.y-p.y);if(w<8||h<8){say('Trasează un dreptunghi mai mare.');drawStart=null;drawOverlay();return;}const r=normRect({x,y,w,h});if(drawMode==='piece'){pieceRect=r;emptyRef=null;pieceRef=null;}else{markRect=r;markRef=null;absentRef=null;}drawMode=null;drawStart=null;drawOverlay();calState();say('Zonă mutată. Recalibrează referințele corespunzătoare.');});
+overlay.addEventListener('pointerup',e=>{if(!drawStart)return;const p=toPoint(e),x=Math.min(drawStart.x,p.x),y=Math.min(drawStart.y,p.y),w=Math.abs(drawStart.x-p.x),h=Math.abs(drawStart.y-p.y);if(w<8||h<8){say('Trasează un dreptunghi mai mare.');drawStart=null;drawOverlay();return;}const r=normRect({x,y,w,h});if(drawMode==='piece'){pieceRect=r;emptyRef=null;pieceRef=null;}else{markRect=r;markRef=null;absentRef=null;}drawMode=null;drawStart=null;drawOverlay();calState();persist();say('Zonă mutată. Recalibrează referințele corespunzătoare.');});
 $('start').onclick=startCamera;$('stop').onclick=stopCamera;$('setPiece').onclick=()=>setRegion('piece');$('setMark').onclick=()=>setRegion('mark');$('calEmpty').onclick=()=>calibration('empty');$('calPiece').onclick=()=>calibration('piece');$('calMark').onclick=()=>calibration('mark');$('calNoMark').onclick=()=>calibration('absent');
 $('manual').onclick=()=>inspect(capture(),false);
-$('automatic').onclick=()=>{if(auto){stopAuto();say('AUTO oprit.');return;}if(!emptyRef||!pieceRef||!markRef||!absentRef){say('Lipsesc calibrări. Urmărește lista de la Calibrare.');calState();return;}auto=true;machine='WAIT';seen=0;gone=0;$('automatic').textContent='AUTO INSPECT: ON';$('belt').textContent='Monitorizare';say('AUTO pornit: fiecare piesă numărată o singură dată după detectarea sosirii.');};
-$('reset').onclick=()=>{if(!confirm('Resetezi contoarele OK/NOK/TOTAL?'))return;ok=0;nok=0;count();say('Contoare resetate.');};
-$('anywhere').onchange=updateSettings;settings.forEach(id=>$(id).addEventListener('input',updateSettings));
-$('save').onclick=()=>{try{localStorage.setItem('blackdot_v3',JSON.stringify({pieceRect,markRect,emptyRef,pieceRef,markRef,absentRef,ok,nok,values:Object.fromEntries(settings.map(id=>[id,$(id).value])),anywhere:$('anywhere').checked}));say('Setări și contoare salvate în acest browser pe acest iPhone.');}catch(e){say('Nu s-a putut salva: '+e.message);}};
+$('automatic').onclick=()=>{if(auto){stopAuto();say('AUTO oprit.');return;}if(!emptyRef||!pieceRef||!markRef||!absentRef){say('Lipsesc calibrări. Urmărește lista de la Calibrare.');calState();return;}auto=true;machine='WAIT';seen=0;gone=0;$('automatic').textContent='AUTO INSPECT: ON';refreshIndicators();$('belt').textContent='Monitorizare';say('AUTO pornit: fiecare piesă numărată o singură dată după detectarea sosirii.');};
+$('reset').onclick=()=>{if(!confirm('Resetezi contoarele OK/NOK/TOTAL?'))return;ok=0;nok=0;count();persist();say('Contoare resetate.');};
+$('anywhere').onchange=()=>{updateSettings();persist();};settings.forEach(id=>$(id).addEventListener('input',()=>{updateSettings();persist();}));
+$('save').onclick=()=>persist(false);
 try{const s=JSON.parse(localStorage.getItem('blackdot_v3')||'null');if(s){pieceRect=normRect(s.pieceRect||pieceRect);markRect=normRect(s.markRect||markRect);emptyRef=s.emptyRef||null;pieceRef=s.pieceRef||null;markRef=s.markRef||null;absentRef=s.absentRef||null;ok=s.ok||0;nok=s.nok||0;$('anywhere').checked=!!s.anywhere;settings.forEach(id=>{if(s.values&&s.values[id]!==undefined)$(id).value=s.values[id];});say('Setările anterioare au fost încărcate.');}}catch(e){say('Setările salvate nu au putut fi citite.');}
 window.addEventListener('pagehide',stopCamera);document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream)stopAuto();});
 count();calState();updateSettings();drawOverlay();
+
+const drawer=$('settingsDrawer'),backdrop=$('menuBackdrop');
+function toggleMenu(open){drawer.classList.toggle('open',open);drawer.setAttribute('aria-hidden',String(!open));backdrop.hidden=!open;document.body.classList.toggle('drawer-open',open);$('menuOpen').setAttribute('aria-expanded',String(open));}
+$('menuOpen').onclick=()=>toggleMenu(true);$('menuClose').onclick=()=>toggleMenu(false);backdrop.onclick=()=>toggleMenu(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleMenu(false);});
