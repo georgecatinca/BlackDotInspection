@@ -1,1 +1,27 @@
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:#101827;color:#f8fafc}.app{max-width:760px;padding:12px;margin:auto}header{text-align:center;padding:7px}h1{font-size:23px;margin:0}small,.muted,footer{color:#a9b8cc}.view{position:relative;background:black;aspect-ratio:4/3;border:2px solid #526178;border-radius:12px;overflow:hidden;touch-action:none}.view video,.view canvas{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}.view canvas{touch-action:none}.hint{position:absolute;bottom:0;width:100%;padding:8px;background:#000b;text-align:center;font-size:13px;pointer-events:none}.result{padding:18px;text-align:center;font-size:26px;font-weight:800;border-radius:10px;margin:10px 0}.idle{background:#374151}.running{background:#1d4ed8}.okresult{background:#15803d}.nokresult{background:#b91c1c}.warning{background:#b45309}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.counts>div{background:#273449;border-radius:9px;text-align:center;padding:10px;font-size:12px;color:#cbd5e1}.counts strong{display:block;font-size:29px;color:#fff}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}button{min-height:46px;padding:9px 5px;border:0;border-radius:8px;font-size:12px;font-weight:800;color:#f8fafc;background:#475569;cursor:pointer}.green{background:#15803d}.red{background:#b91c1c}.blue{background:#2563eb}.purple{background:#7e22ce}.panel{background:#1c293c;margin-top:12px;padding:13px;border-radius:11px}h2{font-size:17px;margin:3px 0 13px}.switchrow{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:13px;font-weight:bold}.switchrow input{width:23px;height:23px;accent-color:#22c55e}.switchrow span:last-child{color:#93c5fd}.muted{font-size:12px;line-height:1.45}.sliders{display:grid;gap:13px;margin-top:15px}.sliders label{font-size:13px;display:block}.sliders input{width:100%;accent-color:#3b82f6;display:block}.sliders output{float:right;font-weight:bold}.telemetry{font-size:13px;line-height:1.8;color:#cbd5e1}#log{color:#bfdbfe;font-size:13px;min-height:2em}footer{text-align:center;padding:19px 0;font-size:11px}
+
+/* V3: ecran de producție + setări în drawer mobil */
+.topbar{display:grid;grid-template-columns:46px 1fr 22px;align-items:center;gap:6px;text-align:center;padding:6px 0 12px}
+.topbar h1{font-size:clamp(16px,4.2vw,23px);line-height:1.2}.topbar small{font-size:12px}
+.menu-btn,.close-btn{font-size:24px;background:#273449;min-height:42px;border:1px solid #526178}
+.statusdot{width:12px;height:12px;border-radius:50%;display:block}
+.statusdot.green{background:#22c55e}.statusdot.amber{background:#f59e0b}
+.status-strip{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{font-size:11px;padding:6px 9px;border-radius:20px;font-weight:700}
+.chip.green,.state.green{background:#14532d;color:#bbf7d0}.chip.amber,.state.amber{background:#78350f;color:#fde68a}
+.main-log{color:#bcd6fa;font-size:12px;min-height:1.4em;margin:12px 3px}
+.drawer-backdrop{position:fixed;inset:0;background:#000b;z-index:20}
+.drawer{position:fixed;left:0;top:0;bottom:0;width:min(92vw,450px);background:#101827;z-index:21;box-shadow:8px 0 35px #0009;transform:translateX(-105%);transition:transform .22s;display:flex;flex-direction:column;visibility:hidden}
+.drawer.open{transform:translateX(0);visibility:visible}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px;border-bottom:1px solid #475569}
+.drawer-head b{font-size:19px}.drawer-sub{display:block;font-size:12px;margin-top:4px}
+.green-text{color:#86efac}.amber-text{color:#fcd34d}
+.drawer-scroll{overflow-y:auto;padding:0 12px 30px;-webkit-overflow-scrolling:touch}
+.drawer .panel{margin-top:12px}
+.setting-status{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;margin-top:8px}
+.state{border-radius:20px;font-size:11px;font-weight:800;padding:5px 8px;white-space:nowrap}
+.cal-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0;background:#26364c;border-radius:10px;padding:10px}
+.cal-row>div{display:flex;flex-direction:column;gap:6px}.cal-row b{font-size:13px}
+.cal-row button{min-height:38px;padding:8px 12px;font-size:11px}
+body.drawer-open{overflow:hidden}
+@media(min-width:700px){.app{padding:16px}.topbar h1{font-size:24px}}
