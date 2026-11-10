@@ -1,17 +1,29 @@
 <!doctype html>
 <html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><title>BlackDotInspection V3</title><link rel="stylesheet" href="style.css"></head>
 <body><main class="app">
-<header><h1>BLACK DOT INSPECTION</h1><small>V3 BETA · control vizual</small></header>
+<header class="topbar"><button id="menuOpen" class="menu-btn" aria-label="Deschide setările" aria-controls="settingsDrawer" aria-expanded="false">☰</button><div><h1>BLACK DOT INSPECTION</h1><small>V3 BETA · control vizual</small></div><span id="overallDot" class="statusdot amber" title="Stare configurație"></span></header>
 <section class="view" id="view"><video id="camera" autoplay muted playsinline></video><canvas id="overlay"></canvas><div class="hint" id="hint">Camera oprită</div></section>
+<div class="status-strip"><span id="cameraChip" class="chip amber">● Cameră oprită</span><span id="autoChip" class="chip amber">● Auto oprit</span><span id="calChip" class="chip amber">● Calibrare incompletă</span></div>
 <section class="result idle" id="result">AȘTEPTARE</section>
 <section class="counts"><div>TOTAL<strong id="total">0</strong></div><div>OK<strong id="ok">0</strong></div><div>NOK<strong id="nok">0</strong></div></section>
-<div class="controls"><button id="start" class="green">START CAMERA</button><button id="stop" class="red">STOP CAMERA</button></div>
-<section class="panel"><h2>1. Mod de verificare</h2><label class="switchrow"><span>CAUTĂ BULINA ORIUNDE</span><input type="checkbox" id="anywhere"><span id="mode">Poziție fixă</span></label><p class="muted">Dezactivat: verifică doar zona marcată. Activat: caută în zona de căutare definită pe piesă.</p>
-<h2>2. Zone și calibrare</h2><div class="controls"><button id="setPiece" class="blue">MARCHEAZĂ PIESA</button><button id="setMark" class="blue">MARCHEAZĂ BULINA</button></div>
-<p class="muted">Alege un buton și trasează cu degetul un dreptunghi pe imagine. Zona piesei trebuie să includă o porțiune reprezentativă care se schimbă clar față de banda goală; zona bulinei să cuprindă semnul și puțin fundal.</p>
-<div class="controls"><button id="calEmpty">CAL BANDĂ GOALĂ</button><button id="calPiece">CAL PIESĂ PREZENTĂ</button><button id="calMark">CAL BULINĂ PREZENTĂ</button><button id="calNoMark">CAL BULINĂ ABSENTĂ</button></div>
-<div class="sliders"><label>Prag piesă <output id="pieceThOut">25</output><input id="pieceTh" type="range" min="5" max="100" value="25"></label><label>Potrivire semn <output id="matchOut">0.74</output><input id="match" type="range" min="0.50" max="0.98" step="0.01" value="0.74"></label><label>Toleranță poziție (px de analiză) <output id="tolOut">2</output><input id="tol" type="range" min="0" max="15" value="2"></label><label>Toleranță mărime (%) <output id="sizeOut">15</output><input id="size" type="range" min="0" max="50" step="5" value="15"></label></div>
-<p class="muted">"Poziție fixă" folosește potrivirea vizuală în jurul centrului calibrat. Toleranța 0 înseamnă zero deplasare admisă în grila de analiză, nu precizie fizică absolută.</p></section>
-<section class="panel"><h2>3. Inspecție</h2><div class="controls"><button id="manual" class="blue">VERIFICĂ ACUM</button><button id="automatic" class="purple">AUTO INSPECT: OFF</button></div><div class="controls"><button id="reset">RESET CONTOARE</button><button id="save">SALVEAZĂ SETĂRI</button></div><div class="telemetry"><div>Stare bandă: <b id="belt">—</b></div><div>Potrivire semn: <b id="score">—</b></div><div>Diferență față de fundal: <b id="diff">—</b></div><div>Calibrare: <b id="cal">—</b></div></div><p id="log" aria-live="polite">Pregătit de configurare.</p></section>
-<footer>Prototype de test · validați detectarea înainte de folosire în producție</footer>
+<p id="mainLog" class="main-log" aria-live="polite">Pregătit de configurare.</p>
+<div id="menuBackdrop" class="drawer-backdrop" hidden></div>
+<aside id="settingsDrawer" class="drawer" aria-label="Setări inspecție" aria-hidden="true">
+<div class="drawer-head"><div><b>⚙ Setări & control</b><small id="savedIndicator" class="drawer-sub amber-text">● Nesalvat</small></div><button id="menuClose" class="close-btn" aria-label="Închide meniul">✕</button></div>
+<div class="drawer-scroll">
+<section class="panel"><h2>1. Cameră & inspecție</h2><div class="controls"><button id="start" class="green">START CAMERA</button><button id="stop" class="red">STOP CAMERA</button></div>
+<div class="controls"><button id="manual" class="blue">VERIFICĂ ACUM</button><button id="automatic" class="purple">AUTO INSPECT: OFF</button></div>
+<div class="setting-status"><span>Cameră</span><strong id="cameraState" class="state amber">NEPORNITĂ</strong></div><div class="setting-status"><span>Inspecție automată</span><strong id="autoState" class="state amber">OPRITĂ</strong></div></section>
+<section class="panel"><h2>2. Mod verificare</h2><label class="switchrow"><span>CAUTĂ BULINA ORIUNDE</span><input type="checkbox" id="anywhere"><span id="mode">Poziție fixă</span></label><p class="muted">Dezactivat: doar poziția fixă marcată. Activat: caută oriunde în zona piesei.</p></section>
+<section class="panel"><h2>3. Zone & calibrare</h2><div class="controls"><button id="setPiece" class="blue">MARCHEAZĂ PIESA</button><button id="setMark" class="blue">MARCHEAZĂ BULINA</button></div><p class="muted">Alege zona și trasează un dreptunghi pe imagine, apoi calibrează.</p>
+<div class="cal-row"><div><b>Bandă goală</b><span id="emptyState" class="state amber">NECALIBRATĂ</span></div><button id="calEmpty">CALIBREAZĂ</button></div>
+<div class="cal-row"><div><b>Piesă prezentă</b><span id="pieceState" class="state amber">NECALIBRATĂ</span></div><button id="calPiece">CALIBREAZĂ</button></div>
+<div class="cal-row"><div><b>Bulină prezentă</b><span id="markState" class="state amber">NECALIBRATĂ</span></div><button id="calMark">CALIBREAZĂ</button></div>
+<div class="cal-row"><div><b>Bulină absentă</b><span id="absentState" class="state amber">NECALIBRATĂ</span></div><button id="calNoMark">CALIBREAZĂ</button></div>
+<p class="muted">Verde = calibrat și salvat pe acest dispozitiv. Galben = necesită calibrare. Dacă muți o zonă, calibrările aferente sunt invalidate.</p>
+<div class="sliders"><label>Prag piesă <output id="pieceThOut">25</output><input id="pieceTh" type="range" min="5" max="100" value="25"></label><label>Potrivire semn <output id="matchOut">0.74</output><input id="match" type="range" min="0.50" max="0.98" step="0.01" value="0.74"></label><label>Toleranță poziție (px analiză) <output id="tolOut">2</output><input id="tol" type="range" min="0" max="15" value="2"></label><label>Toleranță mărime (%) <output id="sizeOut">15</output><input id="size" type="range" min="0" max="50" step="5" value="15"></label></div><p class="muted">Toleranță 0 este în grila de analiză, nu precizie fizică absolută.</p></section>
+<section class="panel"><h2>4. Diagnostic & salvare</h2><div class="telemetry"><div>Stare bandă: <b id="belt">—</b></div><div>Potrivire semn: <b id="score">—</b></div><div>Diferență față de fundal: <b id="diff">—</b></div><div>Calibrare: <b id="cal">—</b></div></div>
+<div class="controls"><button id="reset">RESET CONTOARE</button><button id="save" class="green">SALVEAZĂ SETĂRI</button></div><p id="log" aria-live="polite">Pregătit de configurare.</p></section>
+<footer>Prototip de test · validați detectarea înainte de folosire în producție</footer>
+</div></aside>
 </main><script src="app.js"></script></body></html>
