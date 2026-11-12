@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1728"><title>Black Dot Inspection | Test găuri V3.1</title>
-<style>
+<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1422"><title>Black Dot Inspection | V3.3 AUTO</title><style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0e1728;color:#f8fafc}.app{max-width:1080px;margin:auto;padding:12px}header{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:4px 0 14px}h1{font-size:clamp(18px,4vw,26px);margin:0}h2{font-size:17px;margin:0 0 9px}p{line-height:1.45}small,.muted{color:#b1c3db}.muted{font-size:12px}.tag{border-radius:99px;padding:6px 9px;background:#754b10;color:#fff;font-size:11px;font-weight:800}.tag.good{background:#176e42}.tag.bad{background:#9c2525}.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.8fr);gap:12px}.panel{background:#1b2a40;padding:14px;border-radius:13px;margin-bottom:12px}.stage{position:relative;background:#050a11;border:1px solid #63758c;border-radius:10px;overflow:hidden;margin:10px 0;touch-action:none;aspect-ratio:4/3}.stage canvas{display:block;width:100%;height:100%;object-fit:contain;touch-action:none}.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn,button,.file-button{border:0;border-radius:9px;background:#334860;color:#fff;font-weight:750;font-size:13px;padding:11px 13px;min-height:43px;cursor:pointer}.btn:disabled,button:disabled{opacity:.35;cursor:default}.primary{background:#2563eb}.green{background:#15803d}.red{background:#ad2b2b}.orange{background:#a16207}.file-button{display:inline-flex;align-items:center;gap:5px}.file-button input{display:none}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;border-radius:10px;background:#28384f;padding:10px 3px;font-size:12px;color:#cbd5e1}.stat strong{display:block;color:white;font-size:30px}.headline{background:#334155;padding:12px;text-align:center;border-radius:10px;font-weight:900;font-size:20px}.headline.good{background:#166534}.headline.bad{background:#991b1b}.headline.warn{background:#92400e}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.setting{display:flex;flex-direction:column;gap:5px;margin:13px 0}.setting label{font-size:13px}.setting input[type=range]{width:100%;accent-color:#60a5fa}.setting select{background:#26384e;color:white;border:1px solid #58697d;border-radius:9px;padding:9px}.steps{padding-left:21px;font-size:13px;color:#d1dce9;line-height:1.6}.list{display:grid;gap:7px;margin-top:9px;max-height:260px;overflow-y:auto}.hole{display:flex;justify-content:space-between;gap:6px;align-items:center;padding:8px;border-radius:9px;background:#26384e;font-size:13px}.hole span{flex:1}.hole button{min-height:30px;padding:5px 8px}.chip{font-size:11px;border-radius:99px;background:#7c4a11;padding:4px 7px}.chip.ok{background:#166534}.chip.nok{background:#991b1b}.statusline{color:#bcd3f5;min-height:35px;font-size:13px;line-height:1.4}.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.note{background:#1c3347;border-left:3px solid #f59e0b;border-radius:7px;padding:10px;font-size:12px}.hidden{display:none!important}.boxcheck{display:flex;align-items:center;gap:7px;font-size:13px}.boxcheck input{accent-color:#22c55e}.manualBox{border:1px dashed #64748b;border-radius:9px;padding:10px;margin:10px 0}.manualBox b{display:block;font-size:13px;margin-bottom:5px}#manualStageText{font-size:12px;color:#cbd5e1}.camera{width:100%;background:#020617;max-height:250px;border-radius:8px;margin-top:8px}.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:9px}.legend span{display:flex;align-items:center;gap:5px}.dot{width:11px;height:11px;border-radius:50%;display:inline-block}.okdot{background:#22c55e}.nokdot{background:#f87171}.pendingdot{background:#fbbf24}footer{text-align:center;font-size:11px;color:#9cb0cb;padding:15px}@media(max-width:750px){.layout{grid-template-columns:1fr}.app{padding:9px}.panel{padding:11px}header{align-items:flex-start}.stage{aspect-ratio:4/3}}
 
 .auto-panel{border:1px solid #3d5974}.auto-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}.auto-state{font-size:12px;color:#93c5fd;font-weight:800}.auto-numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}.auto-numbers>div{text-align:center;background:#28384f;padding:8px 2px;border-radius:8px;font-size:11px}.auto-numbers strong{display:block;font-size:26px;color:#fff}.auto-help{color:#becde0;font-size:12px}.autobtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.autobtns button{flex:1;min-width:130px}#autoLog{font-size:12px;color:#d2e5ff;min-height:2em}.auto-status-good{color:#86efac}.auto-status-warn{color:#fcd34d}.auto-result{font-size:21px;font-weight:900;text-align:center;background:#35455a;padding:12px;border-radius:9px;margin:8px 0}#autoLast.good{background:#166534}#autoLast.bad{background:#991b1b}#autoLast.warn{background:#92400e}@media(max-width:500px){.auto-numbers strong{font-size:23px}}
@@ -142,78 +141,113 @@ body.menu-visible{overflow:hidden}
 .camera-quick button:disabled{opacity:.45}
 .camera-quick-note{font-size:11px;color:#96adc8}
 @media(max-width:500px){.camera-quick button{flex:1}.camera-quick-note{width:100%;text-align:center}}
-[hidden]{display:none!important}#menuToggle{cursor:pointer;touch-action:manipulation;z-index:2}#settingsDrawer{z-index:9000}#menuBackdrop{z-index:8999}</style></head><body><main class="app">
-<header><button id="menuToggle" type="button" aria-label="Deschide setările" aria-expanded="false">☰</button><div class="brand"><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.2 · MENIU iPHONE</small></div><div class="engine-unit"><span id="engineStatus" class="readout">● ORB: PORNIRE</span><button id="orbRetry" type="button" class="command command-small" aria-label="Reîncearcă pornirea motorului ORB">↻ Reîncearcă ORB</button><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
+[hidden]{display:none!important}#menuToggle{cursor:pointer;touch-action:manipulation;z-index:2}#settingsDrawer{z-index:9000}#menuBackdrop{z-index:8999}
+
+[hidden]{display:none!important}
+body{background:#0b1422;color:#eaf2ff}
+.app{max-width:1050px;margin:auto;padding:12px}
+header{display:flex;align-items:center;gap:11px;background:#142239;border:1px solid #30475e;padding:12px;border-radius:17px;margin-bottom:13px}
+header h1{font-size:clamp(16px,4vw,22px);margin:0}header small{font-size:11px;color:#91a9c7}
+#menuToggle{flex:none;width:48px;height:48px;border:1px solid #607994!important;border-radius:12px;background:#254063;display:grid;place-items:center;font-size:23px;padding:0;min-height:48px;box-shadow:none!important}
+#menuToggle::after,.navtab::after,#drawerClose::after{content:none!important}
+.engine-unit{margin-left:auto}.engine-unit #orbRetry{display:none}.engine-unit #engineStatus{font-size:10px;padding:7px;max-width:122px;text-align:center}
+.dashboard{display:flex;flex-direction:column;gap:13px}
+.dashboard-card{border:1px solid #293d56;border-radius:18px;background:#152237;padding:14px}
+.dash-heading{font-size:15px;font-weight:800;margin:0 0 13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dash-heading .auto-state{background:#263f60;padding:6px 9px;border-radius:9px;font-size:11px}
+.auto-numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 12px}
+.auto-numbers>div{border:1px solid #3b526b!important;border-radius:12px;background:#1d304a!important;padding:11px 3px;font-size:10px;font-weight:700;color:#a9bed5;text-align:center}
+.auto-numbers strong{font-size:clamp(25px,5vw,37px);color:#fff;display:block}
+.auto-numbers>div:nth-child(2){border-bottom:3px solid #34ce93!important}
+.auto-numbers>div:nth-child(3){border-bottom:3px solid #ef737c!important}
+.auto-numbers>div:nth-child(4){border-bottom:3px solid #efbe64!important}
+#autoLast{font-size:21px;font-weight:850;padding:15px;border-radius:11px;margin:9px 0 8px}
+#autoLog{font-size:12px;line-height:1.55;color:#c1d4e9}
+.monitor-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.monitor-header h2{margin:0;font-size:16px}.monitor-choices{display:flex;gap:4px;padding:3px;border-radius:10px;background:#0a1526;border:1px solid #354a68}
+.monitor-choices button{background:transparent;border:0!important;border-bottom:0!important;box-shadow:none!important;border-radius:8px;min-height:34px;font-size:11px;padding:6px 11px}
+.monitor-choices button::after{content:none!important}.monitor-choices button.current{background:#2d63a2}
+.monitor-area{width:100%;aspect-ratio:4/3;position:relative;overflow:hidden;border-radius:13px;background:#01060d;border:1px solid #435876}
+.monitor-area video,.monitor-area .stage{position:absolute;inset:0;width:100%;height:100%;margin:0;border:0;border-radius:0;background:#01060d;max-height:none;aspect-ratio:auto}
+.monitor-area video{object-fit:contain}
+.monitor-area canvas{width:100%;height:100%;object-fit:contain}
+.monitor-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.monitor-chips .readout{font-size:10px;padding:6px 8px}
+.result-details .headline{font-size:20px}
+#actionNotice{position:relative;top:auto;margin-bottom:0;border-radius:11px;box-shadow:none;padding:11px;font-size:12px}
+.settings-drawer{position:fixed;inset:0 auto 0 0;height:100dvh;width:min(94vw,490px);z-index:10001;display:flex;flex-direction:column;background:#0e1a2b;border-right:1px solid #3b5472;transform:translateX(-105%);visibility:hidden;transition:transform .18s ease,visibility .18s ease;box-shadow:10px 0 30px #0009}
+.settings-drawer.open{transform:translateX(0);visibility:visible}
+.drawer-shade{position:fixed;inset:0;z-index:10000;background:#020712b8}
+.drawer-top{padding:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #30435b}
+.drawer-top h2{font-size:17px;margin:0}.drawer-top p{font-size:11px;color:#9ab2cc;margin:4px 0 0}
+#drawerClose{min-height:42px;width:42px;padding:0;background:#253b56;font-size:21px;border:1px solid #526a83!important;box-shadow:none!important}
+.drawer-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:11px;border-bottom:1px solid #2b405a}
+.navtab{min-height:44px;text-align:left;box-shadow:none!important;border:1px solid #395372!important;border-bottom-width:1px!important;background:#1b2b42;font-size:12px;border-radius:10px}
+.navtab.active{background:#285f94!important;border-color:#80c4ff!important}
+.drawer-body{padding:12px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.drawer-page{display:none}.drawer-page.active{display:block}
+.drawer-page>h3{font-size:17px;margin:5px 0}.drawer-desc{font-size:12px;color:#a4bcd7;margin:5px 0 15px}
+.drawer-page .panel{margin:11px 0;background:#182a40;border:1px solid #354961;border-radius:13px}
+.drawer-page .stage{max-height:400px}
+.drawer-page button{border-radius:10px}
+.drawer-page .actions button,.drawer-page .file-button{flex:1 1 130px;text-align:center;justify-content:center}
+.drawer-page .file-button{border-radius:10px}
+.drawer-page .cal-readout{border:1px solid #415b76;padding:10px;border-radius:10px;margin-top:8px}
+.drawer-page .autobtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drawer-page .autobtns button{min-width:0}.drawer-page .autobtns button:last-child{grid-column:span 2}
+.drawer-page .setting{background:#16253a;padding:10px;border-radius:11px}
+.drawer-page .readout{cursor:default}
+.section-label{letter-spacing:.07em;font-size:10px;font-weight:900;color:#9cb5d2;padding:6px 0}
+main .auto-title{display:none}body.menu-visible{overflow:hidden}
+@media(min-width:840px){.dashboard{display:grid;grid-template-columns:1.5fr 1fr}.dashboard-card:first-child{grid-column:1/-1}.dashboard-card:nth-child(2){grid-column:1}.dashboard-card:nth-child(3){grid-column:2}}
+@media(max-width:550px){.app{padding:8px}header{padding:10px}#menuToggle{width:42px;height:42px}.dashboard-card{padding:11px}.auto-numbers>div{font-size:9px;padding:9px 1px}.auto-numbers strong{font-size:26px}.monitor-header h2{font-size:14px}.monitor-choices button{padding:6px 8px}}
+</style></head>
+<body><main class="app">
+<header><button id="menuToggle" type="button" aria-label="Deschide meniul">☰</button><div style="flex:1;min-width:0"><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.3 · BANDĂ AUTOMATĂ</small></div><div class="engine-unit"><span id="engineStatus" class="readout waiting">● ORB SE ÎNCARCĂ</span><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
 <div id="menuBackdrop" class="drawer-shade" hidden></div>
-<aside id="settingsDrawer" class="settings-drawer" aria-label="Meniu configurare" aria-hidden="true">
-  <div class="drawer-top"><div><h2>Configurare & control</h2><p>Comenzi separate de ecranul de monitorizare</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div>
-  <nav class="drawer-tabs" aria-label="Pagini configurare">
-    <button type="button" class="navtab active" data-page="operate">▶ Operare</button>
-    <button type="button" class="navtab" data-page="model">◎ Etalon & găuri</button>
-    <button type="button" class="navtab" data-page="belt">⚙ Bandă</button>
-    <button type="button" class="navtab" data-page="test">◈ Test & diagnostic</button>
-  </nav>
-  <div class="drawer-body">
-    <section class="drawer-page active" id="page-operate"><h3>Operare cameră</h3><p class="drawer-desc">Pornește camera și inspecția automată.</p><div id="operateControls"></div><div id="operateStates"></div></section>
-    <section class="drawer-page" id="page-model"><h3>Piesa-etalon</h3><p class="drawer-desc">Încarcă și calibrează o singură piesă bună.</p></section>
-    <section class="drawer-page" id="page-belt"><h3>Calibrare bandă</h3><p class="drawer-desc">Calibrează banda goală și reglează detectarea.</p><div id="beltControls"></div></section>
-    <section class="drawer-page" id="page-test"><h3>Test și diagnostic</h3><p class="drawer-desc">Aliniere ORB, teste și parametri.</p></section>
-  </div>
-</aside>
+<aside class="settings-drawer" id="settingsDrawer" aria-label="Setări și control" aria-hidden="true">
+<div class="drawer-top"><div><h2>Configurare & control</h2><p>Butoanele de operare, calibrare și diagnostic</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div>
+<nav class="drawer-tabs"><button class="navtab active" type="button" data-page="operate">▶ Operare</button><button class="navtab" type="button" data-page="model">◎ Etalon & găuri</button><button class="navtab" type="button" data-page="belt">⚙ Bandă</button><button class="navtab" type="button" data-page="test">◈ Test & diagnostic</button></nav>
+<div class="drawer-body">
+<section class="drawer-page active" id="page-operate"><h3>Operare</h3><p class="drawer-desc">Pornește camera, calibrează banda, apoi activează AUTO. Toate comenzile sunt aici.</p>
+<section class="panel"><h2>Cameră</h2><div class="actions"><button id="startCamera" class="green">▶ Pornește camera</button><button id="stopCamera">■ Oprește camera</button><button id="snapCamera">📷 Capturează</button></div><div class="cal-readout">Cameră: <span id="cameraState" class="readout waiting">● OPRITĂ</span></div></section>
+<section class="panel"><h2>Inspecție automată</h2><div class="autobtns"><button id="autoStart" class="green">Pornește inspecția automată</button><button id="resetPieces" class="red">Resetează contoarele</button></div><div class="cal-readout">Auto: <span id="autoIndicator" class="readout waiting">● OPRIT</span></div></section>
+<section class="panel"><h2>Pregătirea sistemului</h2><div class="cal-readout">Bandă: <span class="readout waiting" id="operateBelt">● NECALIBRATĂ</span></div><div class="cal-readout">Etalon: <span id="modelState" class="readout waiting">● NEÎNCĂRCAT</span></div><div class="cal-readout">ORB: <span id="operateORB" class="readout waiting">● ÎN AȘTEPTARE</span></div><button id="orbRetry" type="button" class="primary">↻ Reîncearcă ORB</button></section></section>
+<section class="drawer-page" id="page-model"><h3>Etalon & găuri</h3><p class="drawer-desc">O singură calibrare cu o piesă bună. Marchezi toate găurile, salvezi, iar următoarele piese se aliniază automat.</p>
+<section class="panel"><div class="actions"><label class="file-button primary">📷 Încarcă piesa-etalon<input id="refFile" type="file" accept="image/*"></label><button id="clearModel" class="red">Șterge etalonul</button></div><div class="stage"><canvas id="refCanvas" width="800" height="600"></canvas></div><div class="row"><b id="refCount">0 găuri definite</b><small>Atinge centrul găurilor</small></div>
+<div class="split"><button id="toolCircle" class="primary">● Gaură rotundă</button><button id="toolRect">▭ Decupaj</button></div><div class="setting"><label>Diametru / latură marcaj: <b id="radiusLabel">16</b> px</label><input id="radius" type="range" min="3" max="100" value="16"></div><div class="actions"><button id="undo">↶ Anulează ultima</button><button id="saveModel" class="green">💾 Salvează etalon</button></div></section></section>
+<section class="drawer-page" id="page-belt"><h3>Bandă transportoare</h3><p class="drawer-desc">Cu camera pornită și banda fără piesă, salvează imaginea fundalului.</p>
+<section class="panel"><button id="calBelt" class="primary">Calibrează banda goală</button><div class="cal-readout">Stare: <span id="beltState" class="readout waiting">● NECALIBRATĂ</span> <small id="beltUpdated">—</small></div>
+<div class="setting"><label>Prag detectare piesă: <b id="arrivalOut">12%</b></label><input id="arrival" type="range" min="3" max="50" value="12"></div><div class="setting"><label>Stabilitate cadru: <b id="stableOut">5</b></label><input id="stable" type="range" min="2" max="14" value="5"></div><p class="muted auto-help">Când piesa sosește și rămâne stabilă, programul o inspectează o singură dată. Se rearmează după plecarea piesei.</p></section></section>
+<section class="drawer-page" id="page-test"><h3>Test & diagnostic</h3><p class="drawer-desc">Poți testa o fotografie separată, fără a interveni pe banda automată.</p>
+<section class="panel"><div class="actions"><label class="file-button primary">📷 Încarcă fotografie test<input id="testFile" type="file" accept="image/*"></label><button id="autoAlign" class="primary">🎯 Aliniază automat ORB</button><button id="run" class="green">✓ Verifică găurile</button></div>
+<details class="manualBox"><summary>Aliniere manuală – doar diagnostic</summary><div><b>Aceleași patru puncte pe ambele fotografii</b><div id="manualStageText">Selectează P1–P4 pe etalon și test, în aceeași ordine.</div><div class="actions"><button id="manualRef">1. Puncte etalon</button><button id="manualTest">2. Puncte test</button><button id="manualAlign" class="orange">3. Aliniază manual</button><button id="clearPoints">Șterge punctele</button></div></div></details>
+<div class="legend"><span><i class="dot okdot"></i> Gaură OK</span><span><i class="dot nokdot"></i> Gaură NOK</span><span><i class="dot pendingdot"></i> Neanalizată</span></div></section>
+<section class="panel"><h2>Parametri verificare</h2><div class="setting"><label>Diferență minimă față de etalon: <b id="minRatioOut">45%</b></label><input id="minRatio" type="range" min="10" max="90" step="5" value="45"></div><div class="setting"><label>Contrast local minim: <b id="contrastOut">8</b></label><input id="contrast" type="range" min="2" max="40" value="8"></div><div class="setting"><label>Analiză luminanță</label><select id="polarity"><option value="auto">Automat: deschis / închis</option><option value="dark">Găuri întunecate</option><option value="bright">Găuri luminoase</option></select></div><label class="boxcheck"><input id="strict" type="checkbox" checked> Neconcludent dacă etalonul are contrast insuficient</label></section>
+<section class="panel"><h2>Instrucțiuni</h2><ol class="steps"><li>Încarcă etalon OK și marchează toate găurile.</li><li>Salvează etalonul.</li><li>Pornește camera și calibrează banda goală.</li><li>Pornește AUTO din Operare.</li><li>Testează repetat cu piese rotite și verifică numărarea.</li></ol><div class="note">Prototip: verificarea dimensiunii găurilor este bazată pe contrast; nu este încă inspecție metrologică validată.</div></section></section>
+</div></aside>
+<div class="dashboard">
+<section class="dashboard-card" id="productionPanel"><div class="dash-heading">Monitorizare producție <span id="autoStage" class="auto-state">OPRIT</span></div><div class="auto-numbers"><div>TOTAL<strong id="pieceTotal">0</strong></div><div>OK<strong id="pieceOK">0</strong></div><div>NOK<strong id="pieceNOK">0</strong></div><div>INCERT<strong id="pieceUnknown">0</strong></div></div><div id="autoLast" class="auto-result">AȘTEPTARE</div><div id="autoLog">Pornește camera, calibrează banda, apoi activează AUTO.</div></section>
+<section class="dashboard-card"><div class="monitor-header"><h2>Monitor cameră</h2><div class="monitor-choices"><button id="showLive" class="current" type="button">LIVE</button><button id="showLast" type="button">ULTIMA</button></div></div><div class="monitor-area"><video id="camera" class="camera hidden" autoplay muted playsinline></video><div class="stage" id="testStage"><canvas id="testCanvas" width="800" height="600"></canvas></div></div><div class="monitor-chips"><span id="cameraFlag" class="readout waiting">● CAMERA OPRITĂ</span><span id="orbFlag" class="readout waiting">● ORB ÎN AȘTEPTARE</span><span id="beltFlag" class="readout waiting">● BANDĂ NECALIBRATĂ</span></div></section>
+<section class="dashboard-card result-details"><h2>Detaliile ultimei inspecții</h2><div id="headline" class="headline warn">AȘTEPTARE ETALON</div><div class="counts" style="margin-top:10px"><div class="stat">AȘTEPTATE<strong id="expected">0</strong></div><div class="stat">OK<strong id="ok">0</strong></div><div class="stat">NOK<strong id="nok">0</strong></div></div><p id="status" class="statusline" aria-live="polite">Încarcă piesa-etalon și marchează găurile.</p><div class="row"><small id="alignmentInfo">Aliniere: —</small><span id="confidence" class="chip">Nevalidată</span></div><div id="holeList" class="list"></div></section>
+</div>
+<div id="actionNotice" class="action-notice" role="status" aria-live="polite"><span id="actionIcon">●</span><span id="actionFeedback">Pregătit. Deschide meniul ☰ pentru comenzi.</span></div>
+<footer>Black Dot Inspection · prototip de test · validează înainte de utilizare în producție</footer>
+</main>
 <script>
-/* Meniul este inițializat separat, înainte de motorul de inspecție. */
 (function(){
- const drawer=document.getElementById('settingsDrawer');
- const shade=document.getElementById('menuBackdrop');
- const toggle=document.getElementById('menuToggle');
- const close=document.getElementById('drawerClose');
- function setOpen(open){
-   drawer.classList.toggle('open',open);
-   drawer.setAttribute('aria-hidden',String(!open));
-   shade.hidden=!open;
-   document.body.classList.toggle('menu-visible',open);
-   toggle.setAttribute('aria-expanded',String(open));
- }
- toggle.addEventListener('click',function(){setOpen(!drawer.classList.contains('open'));});
- close.addEventListener('click',function(){setOpen(false);});
- shade.addEventListener('click',function(){setOpen(false);});
- document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
- document.querySelectorAll('#settingsDrawer .navtab').forEach(function(tab){
-   tab.addEventListener('click',function(){
-     const name=tab.getAttribute('data-page');
-     document.querySelectorAll('#settingsDrawer .navtab').forEach(function(t){t.classList.toggle('active',t===tab);});
-     document.querySelectorAll('#settingsDrawer .drawer-page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+name);});
-     drawer.querySelector('.drawer-body').scrollTop=0;
-   });
- });
+ const drawer=document.getElementById('settingsDrawer'),shade=document.getElementById('menuBackdrop'),btn=document.getElementById('menuToggle'),close=document.getElementById('drawerClose');
+ function open(v){drawer.classList.toggle('open',v);drawer.setAttribute('aria-hidden',String(!v));shade.hidden=!v;document.body.classList.toggle('menu-visible',v);btn.setAttribute('aria-expanded',String(v));}
+ btn.addEventListener('click',()=>open(!drawer.classList.contains('open')));
+ close.addEventListener('click',()=>open(false));shade.addEventListener('click',()=>open(false));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')open(false);});
+ drawer.querySelectorAll('.navtab').forEach(t=>t.addEventListener('click',()=>{
+  drawer.querySelectorAll('.navtab').forEach(n=>n.classList.toggle('active',n===t));
+  drawer.querySelectorAll('.drawer-page').forEach(p=>p.classList.toggle('active',p.id==='page-'+t.dataset.page));
+  drawer.querySelector('.drawer-body').scrollTop=0;
+ }));
 })();
 </script>
-<div id="actionNotice" class="action-notice" role="status" aria-live="polite"><span id="actionIcon">●</span> <span id="actionFeedback">Pregătit. Apasă un buton pentru o comandă.</span></div><section class="panel auto-panel" id="productionPanel"><div class="section-label">INDICATORI DE STARE · DOAR CITIRE</div><div class="auto-title"><h2>⚙ CICLU AUTOMAT · BANDĂ</h2><span id="autoStage" class="auto-state">OPRIT</span></div>
-<div class="auto-numbers"><div class="readonly-stat">TOTAL<strong id="pieceTotal">0</strong></div><div class="readonly-stat">OK<strong id="pieceOK">0</strong></div><div class="readonly-stat">NOK<strong id="pieceNOK">0</strong></div><div class="readonly-stat">INCERT<strong id="pieceUnknown">0</strong></div></div>
-<div id="autoLast" class="auto-result">AȘTEPTARE</div><div id="autoLog">Pornește camera, calibrează banda goală o singură dată, apoi activează AUTO.</div>
-<div class="section-label action-section">COMENZI · APASĂ PENTRU EXECUTARE</div><div class="autobtns"><button id="calBelt" class="primary">1. CALIBREAZĂ BANDA GOALĂ</button><button id="autoStart" class="green">2. AUTO INSPECT: OFF</button><button id="resetPieces" class="red">RESET PIESE</button></div><div class="cal-readout">Calibrare bandă: <span id="beltState" class="readout waiting">● NECALIBRATĂ</span> <small id="beltUpdated">—</small></div><div class="cal-readout">Cameră: <span id="cameraState" class="readout waiting">● OPRITĂ</span></div><div class="cal-readout">Mod automat: <span id="autoIndicator" class="readout waiting">● OPRIT</span></div>
-<div class="setting"><label>Prag diferență față de bandă: <b id="arrivalOut">12%</b></label><input id="arrival" type="range" min="3" max="50" value="12"></div>
-<div class="setting"><label>Stabilitate cadru (mai mare = mai permisiv): <b id="stableOut">5</b></label><input id="stable" type="range" min="2" max="14" value="5"></div>
-<p class="auto-help">Camera rămâne fixă. Banda goală se calibrează fără piesă. După aceea piesele sunt detectate, aliniate și inspectate fără atingerea ecranului. O piesă este numărată o singură dată; sistemul se rearmează după dispariția ei. Pentru test, verifică și cercurile peste găuri. INCERT nu este OK.</p></section>
-<div class="layout"><div>
-<section class="panel"><div class="section-label action-section">CONFIGURARE · COMENZI MARCATE CU ↗</div><h2>1. Piesă-etalon OK</h2><div class="actions"><label class="file-button primary">↗ 📷 Încarcă etalon <input id="refFile" type="file" accept="image/*"></label><button id="clearModel" class="red">Șterge etalonul</button></div>
-<div class="stage"><canvas id="refCanvas" width="800" height="600"></canvas></div>
-<div class="row"><b id="refCount">0 găuri definite</b><small>Apasă pe centrul fiecărei găuri</small></div>
-<div class="split"><button id="toolCircle" class="primary">● Adaugă gaură rotundă</button><button id="toolRect">▭ Adaugă decupaj</button></div>
-<div class="setting"><label>Diametru / latură marcaj: <b id="radiusLabel">16</b> px în imaginea de referință</label><input type="range" id="radius" min="3" max="100" value="16"></div>
-<div class="actions"><button id="undo">↶ Anulează ultima gaură</button><button id="saveModel" class="green">💾 Salvează etalon</button></div>
-<p class="muted">Pentru fiecare gaură, apasă în centru. Ajustează mărimea și selectează formă rotundă sau dreptunghiulară. Marcajul trebuie să fie în interiorul deschiderii, aproape de margine, fără să includă metalul. Pentru găurile foarte mici folosește zoom-ul foto înainte de încărcare, dacă este necesar.</p></section>
-<section class="panel"><h2>2. Piesă de verificat</h2><p class="muted">În AUTO nu marchezi nimic pe piesele noi. Fotografiile încărcate aici sunt doar pentru testare și diagnostic.</p><div class="actions"><label class="file-button primary">↗ 📷 Încarcă fotografie test <input id="testFile" type="file" accept="image/*"></label><button id="startCamera">▶ Cameră</button><button id="snapCamera">📸 Capturează</button><button id="stopCamera">■ Stop</button></div><video id="camera" class="camera hidden" autoplay muted playsinline></video>
-<div class="stage"><canvas id="testCanvas" width="800" height="600"></canvas></div>
-<div class="actions"><button id="autoAlign" class="primary">🎯 Aliniază automat (ORB V1)</button><button id="run" class="green">✓ Verifică găurile</button></div>
-<details class="manualBox"><summary>Diagnostic avansat: aliniere manuală opțională</summary><div><b>Alternativă dacă alinierea automată eșuează</b><div id="manualStageText">Marchează pe etalon și pe test aceleași 4 puncte distincte de pe piesă, în aceeași ordine (de exemplu 4 colțuri fizice).</div><div class="actions"><button id="manualRef">1. Puncte pe etalon</button><button id="manualTest">2. Puncte pe test</button><button id="manualAlign" class="orange">3. Aliniază manual</button><button id="clearPoints">Șterge punctele</button></div></div></details>
-<div class="legend"><span><i class="dot okdot"></i> Gaură OK</span><span><i class="dot nokdot"></i> Gaură NOK</span><span><i class="dot pendingdot"></i> Neanalizată</span></div></section>
-</div><div>
-<section class="panel"><h2>Rezultat inspecție</h2><div id="headline" class="headline warn">AȘTEPTARE ETALON</div><div class="counts" style="margin-top:10px"><div class="stat">AȘTEPTATE<strong id="expected">0</strong></div><div class="stat">OK<strong id="ok">0</strong></div><div class="stat">NOK<strong id="nok">0</strong></div></div><p id="status" class="statusline" aria-live="polite">Încarcă piesa-etalon și marchează găurile.</p><div class="row"><small id="alignmentInfo">Aliniere: —</small><span id="confidence" class="chip">Nevalidată</span></div><div id="holeList" class="list"></div></section>
-<section class="panel"><h2>3. Parametri test</h2><div class="setting"><label>Diferență minimă față de etalon: <b id="minRatioOut">45%</b></label><input id="minRatio" type="range" min="10" max="90" step="5" value="45"></div><div class="setting"><label>Contrast local minim: <b id="contrastOut">8</b></label><input id="contrast" type="range" min="2" max="40" step="1" value="8"></div><div class="setting"><label>Analiză canal luminanță</label><select id="polarity"><option value="auto">Automat: deschideri mai închise sau deschise</option><option value="dark">Găuri mai întunecate decât metalul</option><option value="bright">Găuri mai luminoase decât metalul</option></select></div><label class="boxcheck"><input id="strict" type="checkbox" checked> Marchează neconcludent dacă etalonul nu are contrast suficient</label><div class="note" style="margin-top:12px">Testul V1.4 compară contraste locale, nu măsoară încă diametre în milimetri. O gaură mai mică poate fi semnalată ca NOK dacă modificarea contrastului este suficientă; nu este validare dimensională.</div></section>
-<section class="panel"><h2>Ordinea de test</h2><ol class="steps"><li>Încarcă fotografia unei piese OK, văzută de sus.</li><li>Marchează găurile de verificat. Salvează etalonul.</li><li>Încarcă o fotografie a aceleiași piese rotite sau mutată.</li><li>Apasă „Aliniază automat”. Dacă nu reușește, folosește cele patru puncte manuale.</li><li>Apasă „Verifică găurile” și citește rezultatul fiecărei perforații.</li></ol><div class="note"><b>Limitări importante:</b> iluminarea și fundalul trebuie testate; fotografiile oblice, găurile minuscule și reflexiile puternice pot produce erori. Acest prototip nu este încă potrivit pentru sortare automată în producție.</div></section>
-</div></div><footer>Black Dot Inspection · prototip separat pentru validarea alinierii și a detectării găurilor · necesită internet pentru OpenCV.js</footer></main>
-<!-- OpenCV este încărcat controlat de aplicație: fără buclă infinită de așteptare. -->
 <script>
 'use strict';
 const $=id=>document.getElementById(id), refCanvas=$('refCanvas'),testCanvas=$('testCanvas'),rc=refCanvas.getContext('2d'),tc=testCanvas.getContext('2d');
@@ -491,104 +525,27 @@ function setupControlFeedback(){
 setupControlFeedback();
 
 
-(function redesignUI(){
-  // Refolosim nodurile originale, nu le recreăm, pentru a păstra toate evenimentele și ID-urile.
-  const root=document.querySelector('main.app');
-  const header=root.querySelector('header');
-  const topFeedback=$('actionNotice');
-  const production=$('productionPanel');
-  const leftRight=root.querySelector('.layout');
-  const allPanels=[...leftRight.querySelectorAll(':scope > div > section.panel')];
-  const refPanel=allPanels.find(x=>x.querySelector('#refCanvas'));
-  const testPanel=allPanels.find(x=>x.querySelector('#testCanvas'));
-  const resultPanel=allPanels.find(x=>x.querySelector('#headline'));
-  const paramsPanel=allPanels.find(x=>x.querySelector('#minRatio'));
-  const helpPanel=allPanels.find(x=>x.querySelector('.steps'));
-  if(!refPanel||!testPanel||!resultPanel||!paramsPanel||!helpPanel)return;
-  const brand=header.querySelector('div:not(.engine-unit)');brand.classList.add('brand');
-  const overlay=document.getElementById('menuBackdrop');
-  const drawer=document.getElementById('settingsDrawer');
-  const dashboard=document.createElement('div');dashboard.className='dashboard';
-  root.insertBefore(dashboard,topFeedback);
-  const summary=document.createElement('section');summary.className='summary';
-  summary.innerHTML='<div class="summary-top"><h2>Monitorizare producție</h2></div>';
-  const title=production.querySelector('.auto-title');
-  $('autoStage').parentNode.removeChild($('autoStage'));summary.querySelector('.summary-top').appendChild($('autoStage'));
-  title.remove();
-  summary.append(production.querySelector('.auto-numbers'),$('autoLast'),$('autoLog'));
-  dashboard.append(summary);
-  const monitor=document.createElement('section');monitor.className='monitor-panel';
-  monitor.innerHTML='<div class="monitor-head"><div><h2>Monitor cameră</h2><p>Piesa curentă sau ultima inspecție</p></div><div class="view-switch"><button id="showLive" class="current" type="button">LIVE</button><button id="showLast" type="button">ULTIMA</button></div></div><div id="monitorViewport" class="monitor-viewport"></div><div class="monitor-footer"><span id="cameraFlag" class="readout waiting">● CAMERA OPRITĂ</span><span id="orbFlag" class="readout waiting">● ORB ÎN AȘTEPTARE</span><span id="beltFlag" class="readout waiting">● BANDĂ NECALIBRATĂ</span></div>';
-  dashboard.append(monitor);
-  const quickRow=document.createElement('div');
-  quickRow.className='camera-quick';
-  quickRow.innerHTML='<button id="quickCameraStart" type="button">▶ Pornește camera</button><button id="quickCameraStop" type="button" class="quickStop">■ Oprește camera</button><span class="camera-quick-note" id="quickCameraInfo">Camera este oprită</span>';
-  monitor.append(quickRow);
-  const viewport=monitor.querySelector('#monitorViewport');
-  const stage=testPanel.querySelector('.stage'),video=$('camera');
-  viewport.append(video,stage);
-  resultPanel.classList.add('result-panel');
-  resultPanel.querySelector('h2').textContent='Detaliile ultimei inspecții';
-  dashboard.append(resultPanel);
-  root.insertBefore(topFeedback,dashboard.nextSibling);
-  // Controale tehnice: mutate în meniul lateral, fără a pierde handler-ele.
-  const operate=drawer.querySelector('#operateControls');
-  const cameraActions=testPanel.querySelector('.actions');
-  operate.append(cameraActions);
-  const operateStates=drawer.querySelector('#operateStates');
-  operateStates.append(production.querySelector('.cal-readout:nth-of-type(2)')||$('cameraState').parentNode);
-  operateStates.append($('autoIndicator').parentNode);
-  const autoBtns=production.querySelector('.autobtns');
-  operate.append(autoBtns);
-  drawer.querySelector('#page-model').append(refPanel);
-  const beltControls=drawer.querySelector('#beltControls');
-  beltControls.append($('calBelt'));
-  beltControls.append($('beltState').parentNode);
-  beltControls.append(...production.querySelectorAll('.setting'));
-  beltControls.append(production.querySelector('.auto-help'));
-  const testPage=drawer.querySelector('#page-test');
-  const testActions=testPanel.querySelectorAll('.actions');
-  testPage.append(...testActions);
-  testPage.append(testPanel.querySelector('.manualBox'),testPanel.querySelector('.legend'),paramsPanel,helpPanel);
-  // Butonul de reset este separat de pornirea automată.
-  $('resetPieces').textContent='Resetează contoarele de piese';
-  $('calBelt').textContent='Calibrează banda goală';
-  $('startCamera').textContent='Pornește camera';
-  $('stopCamera').textContent='Oprește camera';
-  $('autoStart').textContent='Pornește inspecția automată';
-  // butonul AUTO își va modifica textul în funcție de stare
-  let selectedView='live';
-  function updateView(){
-    const live=selectedView==='live';
-    $('showLive').classList.toggle('current',live);$('showLast').classList.toggle('current',!live);
-    const hasVideo=!!stream && !!video.videoWidth;
-    video.classList.toggle('hidden',!(live&&hasVideo));
-    stage.classList.toggle('hidden',live&&hasVideo);
-    indicator('cameraFlag',hasVideo?'✓ CAMERA ACTIVĂ':'● CAMERA OPRITĂ',hasVideo?'ready':'waiting');
-    indicator('orbFlag',probeOrb()?'✓ ORB DISPONIBIL':'● ORB INDISPONIBIL',probeOrb()?'ready':'failure');
-    indicator('beltFlag',beltBase?'✓ BANDĂ CALIBRATĂ':'● BANDĂ NECALIBRATĂ',beltBase?'ready':'waiting');
-    $('quickCameraStart').disabled=hasVideo;
-    $('quickCameraStop').disabled=!hasVideo;
-    $('quickCameraInfo').textContent=hasVideo?'● Cameră activă':'● Cameră oprită';
-    $('autoStart').textContent=conveyorOn?'Oprește inspecția automată':'Pornește inspecția automată';
-    $('autoStart').classList.toggle('red',conveyorOn);
-    $('autoStart').classList.toggle('green',!conveyorOn);
-  }
-  $('quickCameraStart').onclick=()=>{
-    feedback('Pornesc camera. Dacă iPhone solicită permisiune, alege Permite.','pending');
-    $('startCamera').click();
-    selectedView='live';
-    updateView();
-  };
-  $('quickCameraStop').onclick=()=>{$('stopCamera').click();updateView();feedback('Comandă de oprire cameră transmisă.','info');};
-  $('showLive').onclick=()=>{selectedView='live';updateView();};
-  $('showLast').onclick=()=>{selectedView='last';updateView();};
-  setInterval(updateView,850);updateView();
-  root.querySelector('footer')?.remove();
-  leftRight.remove();production.remove();
-  // Meniul este închis implicit; etalonul și configurarea rămân disponibile la ☰.
-  // Pagina Operare este deja activă în HTML-ul inițial.
+
+(function(){
+let view='live';
+function update(){
+  const live=view==='live',has=!!stream&&!!$('camera').videoWidth;
+  $('camera').classList.toggle('hidden',!live||!has);
+  $('testStage').classList.toggle('hidden',live&&has);
+  $('showLive').classList.toggle('current',live);
+  $('showLast').classList.toggle('current',!live);
+  indicator('cameraFlag',has?'✓ CAMERA ACTIVĂ':'● CAMERA OPRITĂ',has?'ready':'waiting');
+  indicator('orbFlag',probeOrb()?'✓ ORB DISPONIBIL':'● ORB INDISPONIBIL',probeOrb()?'ready':'failure');
+  indicator('beltFlag',beltBase?'✓ BANDĂ CALIBRATĂ':'● BANDĂ NECALIBRATĂ',beltBase?'ready':'waiting');
+  indicator('modelState',refImg&&holes.length?'✓ '+holes.length+' GĂURI DEFINITE':'● ETALON INCOMPLET',refImg&&holes.length?'ready':'waiting');
+  indicator('operateORB',probeOrb()?'✓ PREGĂTIT':'● INDISPONIBIL',probeOrb()?'ready':'failure');
+  indicator('operateBelt',beltBase?'✓ CALIBRATĂ':'● NECALIBRATĂ',beltBase?'ready':'waiting');
+  $('autoStart').textContent=conveyorOn?'Oprește inspecția automată':'Pornește inspecția automată';
+  $('autoStart').classList.toggle('red',conveyorOn);
+  $('autoStart').classList.toggle('green',!conveyorOn);
+}
+$('showLive').onclick=()=>{view='live';update();};
+$('showLast').onclick=()=>{view='last';update();};
+setInterval(update,900);update();
 })();
-
-
 </script></body></html>
