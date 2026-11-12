@@ -142,8 +142,52 @@ body.menu-visible{overflow:hidden}
 .camera-quick button:disabled{opacity:.45}
 .camera-quick-note{font-size:11px;color:#96adc8}
 @media(max-width:500px){.camera-quick button{flex:1}.camera-quick-note{width:100%;text-align:center}}
-</style></head><body><main class="app">
-<header><div><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.1 · MONITORIZARE</small></div><div class="engine-unit"><span id="engineStatus" class="readout">● ORB: PORNIRE</span><button id="orbRetry" type="button" class="command command-small" aria-label="Reîncearcă pornirea motorului ORB">↻ Reîncearcă ORB</button><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
+[hidden]{display:none!important}#menuToggle{cursor:pointer;touch-action:manipulation;z-index:2}#settingsDrawer{z-index:9000}#menuBackdrop{z-index:8999}</style></head><body><main class="app">
+<header><button id="menuToggle" type="button" aria-label="Deschide setările" aria-expanded="false">☰</button><div class="brand"><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.2 · MENIU iPHONE</small></div><div class="engine-unit"><span id="engineStatus" class="readout">● ORB: PORNIRE</span><button id="orbRetry" type="button" class="command command-small" aria-label="Reîncearcă pornirea motorului ORB">↻ Reîncearcă ORB</button><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
+<div id="menuBackdrop" class="drawer-shade" hidden></div>
+<aside id="settingsDrawer" class="settings-drawer" aria-label="Meniu configurare" aria-hidden="true">
+  <div class="drawer-top"><div><h2>Configurare & control</h2><p>Comenzi separate de ecranul de monitorizare</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div>
+  <nav class="drawer-tabs" aria-label="Pagini configurare">
+    <button type="button" class="navtab active" data-page="operate">▶ Operare</button>
+    <button type="button" class="navtab" data-page="model">◎ Etalon & găuri</button>
+    <button type="button" class="navtab" data-page="belt">⚙ Bandă</button>
+    <button type="button" class="navtab" data-page="test">◈ Test & diagnostic</button>
+  </nav>
+  <div class="drawer-body">
+    <section class="drawer-page active" id="page-operate"><h3>Operare cameră</h3><p class="drawer-desc">Pornește camera și inspecția automată.</p><div id="operateControls"></div><div id="operateStates"></div></section>
+    <section class="drawer-page" id="page-model"><h3>Piesa-etalon</h3><p class="drawer-desc">Încarcă și calibrează o singură piesă bună.</p></section>
+    <section class="drawer-page" id="page-belt"><h3>Calibrare bandă</h3><p class="drawer-desc">Calibrează banda goală și reglează detectarea.</p><div id="beltControls"></div></section>
+    <section class="drawer-page" id="page-test"><h3>Test și diagnostic</h3><p class="drawer-desc">Aliniere ORB, teste și parametri.</p></section>
+  </div>
+</aside>
+<script>
+/* Meniul este inițializat separat, înainte de motorul de inspecție. */
+(function(){
+ const drawer=document.getElementById('settingsDrawer');
+ const shade=document.getElementById('menuBackdrop');
+ const toggle=document.getElementById('menuToggle');
+ const close=document.getElementById('drawerClose');
+ function setOpen(open){
+   drawer.classList.toggle('open',open);
+   drawer.setAttribute('aria-hidden',String(!open));
+   shade.hidden=!open;
+   document.body.classList.toggle('menu-visible',open);
+   toggle.setAttribute('aria-expanded',String(open));
+ }
+ toggle.addEventListener('click',function(){setOpen(!drawer.classList.contains('open'));});
+ close.addEventListener('click',function(){setOpen(false);});
+ shade.addEventListener('click',function(){setOpen(false);});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
+ document.querySelectorAll('#settingsDrawer .navtab').forEach(function(tab){
+   tab.addEventListener('click',function(){
+     const name=tab.getAttribute('data-page');
+     document.querySelectorAll('#settingsDrawer .navtab').forEach(function(t){t.classList.toggle('active',t===tab);});
+     document.querySelectorAll('#settingsDrawer .drawer-page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+name);});
+     drawer.querySelector('.drawer-body').scrollTop=0;
+   });
+ });
+})();
+</script>
 <div id="actionNotice" class="action-notice" role="status" aria-live="polite"><span id="actionIcon">●</span> <span id="actionFeedback">Pregătit. Apasă un buton pentru o comandă.</span></div><section class="panel auto-panel" id="productionPanel"><div class="section-label">INDICATORI DE STARE · DOAR CITIRE</div><div class="auto-title"><h2>⚙ CICLU AUTOMAT · BANDĂ</h2><span id="autoStage" class="auto-state">OPRIT</span></div>
 <div class="auto-numbers"><div class="readonly-stat">TOTAL<strong id="pieceTotal">0</strong></div><div class="readonly-stat">OK<strong id="pieceOK">0</strong></div><div class="readonly-stat">NOK<strong id="pieceNOK">0</strong></div><div class="readonly-stat">INCERT<strong id="pieceUnknown">0</strong></div></div>
 <div id="autoLast" class="auto-result">AȘTEPTARE</div><div id="autoLog">Pornește camera, calibrează banda goală o singură dată, apoi activează AUTO.</div>
@@ -462,11 +506,8 @@ setupControlFeedback();
   const helpPanel=allPanels.find(x=>x.querySelector('.steps'));
   if(!refPanel||!testPanel||!resultPanel||!paramsPanel||!helpPanel)return;
   const brand=header.querySelector('div:not(.engine-unit)');brand.classList.add('brand');
-  header.insertAdjacentHTML('afterbegin','<button id="menuToggle" type="button" aria-label="Deschide meniul de setări" aria-expanded="false">☰</button>');
-  const overlay=document.createElement('div');overlay.className='drawer-shade';overlay.hidden=true;
-  const drawer=document.createElement('aside');drawer.className='settings-drawer';drawer.setAttribute('aria-hidden','true');
-  drawer.innerHTML='<div class="drawer-top"><div><h2>Configurare & control</h2><p>Comenzile sunt separate de ecranul de producție</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div><nav class="drawer-tabs" aria-label="Pagini de configurare"><button class="navtab active" data-page="operate">▶ Operare</button><button class="navtab" data-page="model">◎ Etalon & găuri</button><button class="navtab" data-page="belt">⚙ Bandă</button><button class="navtab" data-page="test">◈ Test & diagnostic</button></nav><div class="drawer-body"><section class="drawer-page active" id="page-operate"><h3>Operare cameră</h3><p class="drawer-desc">Pornește camera, apoi activează inspecția automată după ce ai calibrat banda goală și etalonul.</p><div id="operateControls"></div><div id="operateStates"></div></section><section class="drawer-page" id="page-model"><h3>Piesa-etalon</h3><p class="drawer-desc">Încarcă o piesă bună, marchează găurile o singură dată și salvează etalonul.</p></section><section class="drawer-page" id="page-belt"><h3>Calibrare bandă</h3><p class="drawer-desc">Calibrează fără piesă, apoi reglează detectarea și stabilitatea imaginii.</p><div id="beltControls"></div></section><section class="drawer-page" id="page-test"><h3>Test și diagnostic</h3><p class="drawer-desc">Aliniere ORB, verificare manuală, inspectarea fiecărei găuri și parametrii de sensibilitate.</p></section></div>';
-  root.append(overlay,drawer);
+  const overlay=document.getElementById('menuBackdrop');
+  const drawer=document.getElementById('settingsDrawer');
   const dashboard=document.createElement('div');dashboard.className='dashboard';
   root.insertBefore(dashboard,topFeedback);
   const summary=document.createElement('section');summary.className='summary';
@@ -516,16 +557,6 @@ setupControlFeedback();
   $('stopCamera').textContent='Oprește camera';
   $('autoStart').textContent='Pornește inspecția automată';
   // butonul AUTO își va modifica textul în funcție de stare
-  const pages=[...drawer.querySelectorAll('.drawer-page')];
-  const tabs=[...drawer.querySelectorAll('.navtab')];
-  function page(name){tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===name));pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+name));drawer.querySelector('.drawer-body').scrollTop=0;}
-  tabs.forEach(t=>t.onclick=()=>page(t.dataset.page));
-  function toggle(open){drawer.classList.toggle('open',open);drawer.setAttribute('aria-hidden',String(!open));overlay.hidden=!open;document.body.classList.toggle('menu-visible',open);$('menuToggle').setAttribute('aria-expanded',String(open));}
-  // Meniul este conectat de handlerul independent de mai jos.
-  $('menuToggle').onclick=null;
-  $('drawerClose').onclick=null;
-  overlay.onclick=null;
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false);});
   let selectedView='live';
   function updateView(){
     const live=selectedView==='live';
@@ -559,24 +590,5 @@ setupControlFeedback();
   page('operate');
 })();
 
-
-/* Meniu iPhone independent de execuția algoritmului ORB. */
-document.addEventListener('click', function(event){
-  const target=event.target.closest?.('#menuToggle,#drawerClose,.drawer-shade,.navtab');
-  if(!target)return;
-  const drawer=document.querySelector('.settings-drawer'),shade=document.querySelector('.drawer-shade'),btn=document.getElementById('menuToggle');
-  if(!drawer||!shade||!btn)return;
-  if(target.id==='menuToggle'){
-    if(event.__menuHandled)return;
-    const open=!drawer.classList.contains('open');
-    drawer.classList.toggle('open',open);
-    drawer.setAttribute('aria-hidden',String(!open));
-    shade.hidden=!open;
-    document.body.classList.toggle('menu-visible',open);
-    btn.setAttribute('aria-expanded',String(open));
-  } else if(target.id==='drawerClose'||target.classList.contains('drawer-shade')){
-    drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');shade.hidden=true;document.body.classList.remove('menu-visible');btn.setAttribute('aria-expanded','false');
-  }
-},false);
 
 </script></body></html>
