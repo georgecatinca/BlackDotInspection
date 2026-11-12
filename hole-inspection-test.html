@@ -630,7 +630,18 @@ setInterval(update,900);update();
       lastCtx.drawImage(input,(w-dw)/2,(h-dh)/2,dw,dh);
     }catch(e){}
     const headline=$id('headline');
-    $id('testAlignState').textContent=$id('alignmentInfo').textContent+' · '+$id('confidence').textContent;
+    let geometry='';
+    if(typeof Hmat!=='undefined'&&Hmat&&refImg){
+      const cx=refImg.width/2,cy=refImg.height/2,step=Math.max(30,refImg.width*.08);
+      const a=transformPoint(Hmat,cx,cy),b=transformPoint(Hmat,cx+step,cy);
+      if(a&&b){
+        const angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+        const normalized=(angle+360)%360;
+        const scale=Math.hypot(b.x-a.x,b.y-a.y)/step;
+        if(Number.isFinite(normalized)&&Number.isFinite(scale))geometry=' · Rotație estimată '+normalized.toFixed(1)+'° · Scară '+scale.toFixed(2)+'×';
+      }
+    }
+    $id('testAlignState').textContent=$id('alignmentInfo').textContent+' · '+$id('confidence').textContent+geometry;
     $id('testGradeState').textContent=headline.textContent+' | Așteptate '+$id('expected').textContent+' · OK '+$id('ok').textContent+' · NOK '+$id('nok').textContent;
     const status=(typeof grading==='undefined'?[]:grading);
     const holesCurrent=(typeof holes==='undefined'?[]:holes);
@@ -655,7 +666,7 @@ setInterval(update,900);update();
   $id('manualTest').addEventListener('click',()=>{openPage('test');showTest(false);feedback('Selectează P1–P4 pe fotografia de test, în aceeași ordine ca la etalon.','info');});
   const tabTest=document.querySelector('#settingsDrawer .navtab[data-page="test"]');
   if(tabTest)tabTest.addEventListener('click',()=>showTest(false));
-  setInterval(refresh,350);refresh();
+  setInterval(refresh,650);refresh();
 })();
 
 </script></body></html>
