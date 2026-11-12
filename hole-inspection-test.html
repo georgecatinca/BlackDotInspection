@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1728"><title>Black Dot Inspection | Test găuri V2.2 INTERFAȚĂ</title>
+<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1728"><title>Black Dot Inspection | Test găuri V3 UX</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0e1728;color:#f8fafc}.app{max-width:1080px;margin:auto;padding:12px}header{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:4px 0 14px}h1{font-size:clamp(18px,4vw,26px);margin:0}h2{font-size:17px;margin:0 0 9px}p{line-height:1.45}small,.muted{color:#b1c3db}.muted{font-size:12px}.tag{border-radius:99px;padding:6px 9px;background:#754b10;color:#fff;font-size:11px;font-weight:800}.tag.good{background:#176e42}.tag.bad{background:#9c2525}.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.8fr);gap:12px}.panel{background:#1b2a40;padding:14px;border-radius:13px;margin-bottom:12px}.stage{position:relative;background:#050a11;border:1px solid #63758c;border-radius:10px;overflow:hidden;margin:10px 0;touch-action:none;aspect-ratio:4/3}.stage canvas{display:block;width:100%;height:100%;object-fit:contain;touch-action:none}.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn,button,.file-button{border:0;border-radius:9px;background:#334860;color:#fff;font-weight:750;font-size:13px;padding:11px 13px;min-height:43px;cursor:pointer}.btn:disabled,button:disabled{opacity:.35;cursor:default}.primary{background:#2563eb}.green{background:#15803d}.red{background:#ad2b2b}.orange{background:#a16207}.file-button{display:inline-flex;align-items:center;gap:5px}.file-button input{display:none}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;border-radius:10px;background:#28384f;padding:10px 3px;font-size:12px;color:#cbd5e1}.stat strong{display:block;color:white;font-size:30px}.headline{background:#334155;padding:12px;text-align:center;border-radius:10px;font-weight:900;font-size:20px}.headline.good{background:#166534}.headline.bad{background:#991b1b}.headline.warn{background:#92400e}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.setting{display:flex;flex-direction:column;gap:5px;margin:13px 0}.setting label{font-size:13px}.setting input[type=range]{width:100%;accent-color:#60a5fa}.setting select{background:#26384e;color:white;border:1px solid #58697d;border-radius:9px;padding:9px}.steps{padding-left:21px;font-size:13px;color:#d1dce9;line-height:1.6}.list{display:grid;gap:7px;margin-top:9px;max-height:260px;overflow-y:auto}.hole{display:flex;justify-content:space-between;gap:6px;align-items:center;padding:8px;border-radius:9px;background:#26384e;font-size:13px}.hole span{flex:1}.hole button{min-height:30px;padding:5px 8px}.chip{font-size:11px;border-radius:99px;background:#7c4a11;padding:4px 7px}.chip.ok{background:#166534}.chip.nok{background:#991b1b}.statusline{color:#bcd3f5;min-height:35px;font-size:13px;line-height:1.4}.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.note{background:#1c3347;border-left:3px solid #f59e0b;border-radius:7px;padding:10px;font-size:12px}.hidden{display:none!important}.boxcheck{display:flex;align-items:center;gap:7px;font-size:13px}.boxcheck input{accent-color:#22c55e}.manualBox{border:1px dashed #64748b;border-radius:9px;padding:10px;margin:10px 0}.manualBox b{display:block;font-size:13px;margin-bottom:5px}#manualStageText{font-size:12px;color:#cbd5e1}.camera{width:100%;background:#020617;max-height:250px;border-radius:8px;margin-top:8px}.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:9px}.legend span{display:flex;align-items:center;gap:5px}.dot{width:11px;height:11px;border-radius:50%;display:inline-block}.okdot{background:#22c55e}.nokdot{background:#f87171}.pendingdot{background:#fbbf24}footer{text-align:center;font-size:11px;color:#9cb0cb;padding:15px}@media(max-width:750px){.layout{grid-template-columns:1fr}.app{padding:9px}.panel{padding:11px}header{align-items:flex-start}.stage{aspect-ratio:4/3}}
 
@@ -36,8 +36,106 @@ button.command-fail{border-color:#fb7185!important;box-shadow:0 0 0 2px #ef44445
 .action-notice.pending{background:#713f12;border-color:#fbbf24}
 .action-notice.info{background:#223a52;border-color:#60a5fa}
 @media(max-width:600px){.engine-unit{justify-content:flex-start}.action-notice{font-size:12px}.autobtns button{min-height:58px}.auto-numbers>div{padding:8px 1px;min-height:70px}}
+
+/* V3 UX RESET — dashboard de inspecție, control într-un meniu lateral */
+:root{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;color-scheme:dark}
+body{background:#090f1c;color:#f2f6fc}
+.app{max-width:1160px;margin:0 auto;padding:16px}
+header{background:#111c2d;border:1px solid #263850;border-radius:20px;padding:14px 18px;margin:0 0 15px;display:flex;align-items:center;gap:14px;justify-content:space-between}
+header .brand{flex:1;min-width:0}header h1{font-size:clamp(16px,2.3vw,22px);letter-spacing:.02em;margin:0 0 4px}
+header small{font-size:12px;letter-spacing:.02em;color:#8fa8c7}
+#menuToggle{height:48px;width:52px;display:grid;place-items:center;flex-shrink:0;border:1px solid #617991!important;border-bottom-width:1px!important;border-radius:13px;background:#20314b;font-size:25px;box-shadow:none!important;padding:0}
+#menuToggle::after,#drawerClose::after,.navtab::after{content:none!important}
+.engine-unit{gap:6px;flex-direction:column;align-items:end}
+#orbRetry{display:none}
+#engineStatus{border-radius:30px;padding:7px 11px;white-space:nowrap;font-size:10px}
+.dashboard{display:flex;flex-direction:column;gap:14px}
+.panel{border-radius:20px;background:#131f31;border:1px solid #263851;padding:16px;margin:0;box-shadow:0 10px 28px #0002}
+#productionPanel{display:contents}
+#productionPanel .auto-title{order:0}
+.dashboard .summary{order:1}
+.dashboard .monitor-panel{order:2}
+.dashboard .result-panel{order:3}
+.summary,.monitor-panel,.result-panel{background:#131f31;border:1px solid #273850;border-radius:20px;padding:16px}
+.summary-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}
+.summary-top h2{margin:0;font-size:15px;font-weight:750}
+#autoStage{font-size:11px;letter-spacing:.03em}
+.auto-numbers{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0}
+.auto-numbers>div{background:#1c2b40!important;border:1px solid #33455d!important;border-radius:14px;padding:15px 5px;box-shadow:none;font-size:11px;font-weight:700;letter-spacing:.05em;color:#99adc8}
+.auto-numbers strong{font-size:clamp(25px,4vw,39px);font-weight:850;color:#f4f7ff}
+.auto-numbers>div:nth-child(2){border-bottom:3px solid #34c98e!important}
+.auto-numbers>div:nth-child(3){border-bottom:3px solid #fa7075!important}
+.auto-numbers>div:nth-child(4){border-bottom:3px solid #e9b85b!important}
+.monitor-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.monitor-head h2{font-size:17px;margin:0}.monitor-head p{font-size:12px;color:#95aaca;margin:4px 0 0}
+.view-switch{display:flex;border:1px solid #3c516c;background:#0c1727;padding:3px;border-radius:12px;gap:3px}
+.view-switch button{border:0!important;border-bottom:0!important;box-shadow:none!important;border-radius:9px;min-height:35px;font-size:11px;padding:7px 10px;background:transparent}
+.view-switch button::after{content:none!important}
+.view-switch button.current{background:#2d5689;box-shadow:0 2px 10px #0005!important}
+.view-switch button:active{transform:none}
+.monitor-viewport{position:relative;aspect-ratio:4/3;border:1px solid #3e536f;background:#020711;border-radius:16px;overflow:hidden;display:grid;place-items:center}
+.monitor-viewport .stage{position:absolute;inset:0;border:0;border-radius:0;margin:0;aspect-ratio:auto;width:100%;height:100%;display:block;background:#020711}
+.monitor-viewport .stage canvas{width:100%;height:100%;object-fit:contain}
+.monitor-viewport video{width:100%;height:100%;object-fit:contain;background:#020711;max-height:none;margin:0;border-radius:0}
+.monitor-viewport .hidden{display:none!important}
+.monitor-footer{padding-top:11px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.monitor-footer .readout{font-size:11px;padding:6px 9px}
+#autoLast{font-size:clamp(18px,3.1vw,27px);border:0!important;border-radius:13px;padding:17px;margin:0 0 10px;letter-spacing:.01em}
+#autoLog{font-size:13px;line-height:1.55;color:#b9cbe1;min-height:1.5em}
+.result-panel h2{font-size:16px;color:#d8e5f6}
+.result-panel .headline{padding:12px;margin-bottom:12px;border-radius:11px}
+.result-panel .counts{max-width:530px}
+.result-panel .stat{border-bottom:2px solid #46617b}
+.result-panel .statusline{margin-top:12px;overflow-wrap:anywhere}
+.result-panel #holeList{max-height:240px;overflow:auto}
+.result-panel .row{flex-wrap:wrap}
+#actionNotice{position:relative;top:auto;margin:0;border:1px solid #29425c;border-left:4px solid #70aaf9;border-radius:12px;box-shadow:none;background:#162940;min-height:44px;font-size:12px;padding:10px 13px}
+#actionNotice.success{background:#133a2c;border-left-color:#47d79b}
+#actionNotice.error{background:#461f2a;border-left-color:#fb7b82}
+#actionNotice.pending{background:#463718;border-left-color:#ffc365}
+.drawer-shade{position:fixed;inset:0;background:#010711bd;z-index:89;backdrop-filter:blur(3px)}
+.settings-drawer{position:fixed;z-index:90;left:0;top:0;height:100dvh;width:min(94vw,510px);display:flex;flex-direction:column;background:#0e1828;border-right:1px solid #344964;box-shadow:18px 0 55px #000a;transform:translateX(-104%);visibility:hidden;transition:transform .22s ease,visibility .22s ease}
+.settings-drawer.open{transform:translateX(0);visibility:visible}
+.drawer-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:19px 17px 13px;border-bottom:1px solid #263b54}
+.drawer-top h2{font-size:19px;margin:0}.drawer-top p{font-size:12px;color:#97adc8;margin:4px 0 0}
+#drawerClose{width:42px;height:42px;border:1px solid #6c829b!important;border-bottom-width:1px!important;box-shadow:none!important;background:#223650;font-size:21px;border-radius:11px}
+.drawer-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px 14px;border-bottom:1px solid #26374c}
+.navtab{display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:8px;min-height:44px!important;font-size:12px!important;font-weight:750!important;padding:10px 12px!important;background:#19283b!important;border:1px solid #30455f!important;border-bottom-width:1px!important;border-radius:10px!important;box-shadow:none!important}
+.navtab.active{background:#244c72!important;border-color:#6cbdff!important;color:#fff}
+.drawer-body{padding:14px;overflow:auto;flex:1;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.drawer-page{display:none}.drawer-page.active{display:block}
+.drawer-page>h3{font-size:17px;margin:3px 0 5px}.drawer-desc{color:#9eb5d1;font-size:12px;line-height:1.5;margin:0 0 14px}
+.drawer-page .panel{margin-bottom:11px;padding:12px;border-radius:13px}
+.drawer-page .stage{border-radius:12px}
+.drawer-page .actions{gap:9px}
+.drawer-page button:not(.navtab){font-size:12px;border-radius:12px!important;padding:11px 14px;min-height:46px}
+.drawer-page button:not(.navtab)::after{content:none!important}
+.drawer-page button:not(.navtab),.drawer-page .file-button{border:1px solid #52769d!important;border-bottom:3px solid #142437!important;box-shadow:0 3px 0 #050b13!important}
+.drawer-page button.primary,.drawer-page .file-button.primary{background:#2766c7!important}
+.drawer-page button.green{background:#188459!important}
+.drawer-page button.red{background:#8c3646!important}
+.drawer-page button.orange{background:#975e1a!important}
+.drawer-page .actions button,.drawer-page .file-button{flex:1 1 145px;text-align:center;justify-content:center}
+.drawer-page .section-label{color:#8ca8cb}
+.drawer-page .cal-readout{border-radius:11px;background:#152338;padding:11px;margin:10px 0;font-size:12px;justify-content:space-between}
+.drawer-page .autobtns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.drawer-page .autobtns button{min-width:0}
+.drawer-page .autobtns button:last-child{grid-column:1/-1}
+.drawer-page .setting{background:#152238;padding:11px;border-radius:10px}
+.drawer-page .manualBox{margin-top:10px}
+.drawer-page .stage{max-height:420px}
+.drawer-page .stage canvas{object-fit:contain}
+.drawer-page .file-button{min-height:48px;display:flex;align-items:center}
+.drawer-page .boxcheck{line-height:1.5}
+.drawer-page .readout{box-shadow:none}
+.config-status{display:flex;align-items:center;justify-content:space-between;gap:9px;background:#16253b;padding:12px;border-radius:12px;border:1px solid #2e425d;font-size:12px;margin:8px 0}
+.config-status b{color:#d6e7fa;font-weight:800}
+.config-status .readout{max-width:60%;text-align:right}
+body.menu-visible{overflow:hidden}
+@media(min-width:850px){.dashboard{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.9fr);gap:14px;align-items:start}.dashboard .summary{grid-column:1/-1}.dashboard .monitor-panel{grid-column:1}.dashboard .result-panel{grid-column:2}}
+@media(max-width:600px){.app{padding:9px}header{padding:11px;border-radius:15px;gap:9px}#menuToggle{width:43px;height:43px}header h1{font-size:15px}header small{font-size:10px}#engineStatus{font-size:9px;white-space:normal;max-width:100px;text-align:center}.summary,.monitor-panel,.result-panel{padding:12px;border-radius:16px}.summary-top h2{font-size:14px}.auto-numbers{gap:5px}.auto-numbers>div{font-size:9px}.auto-numbers strong{font-size:26px}.monitor-head h2{font-size:15px}.view-switch button{padding:7px 6px;font-size:10px}}
 </style></head><body><main class="app">
-<header><div><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V2.2 · CICLU AUTOMAT PE BANDĂ</small></div><div class="engine-unit"><span id="engineStatus" class="readout">● ORB: PORNIRE</span><button id="orbRetry" type="button" class="command command-small" aria-label="Reîncearcă pornirea motorului ORB">↻ Reîncearcă ORB</button><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
+<header><div><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3 UX · MONITORIZARE</small></div><div class="engine-unit"><span id="engineStatus" class="readout">● ORB: PORNIRE</span><button id="orbRetry" type="button" class="command command-small" aria-label="Reîncearcă pornirea motorului ORB">↻ Reîncearcă ORB</button><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
 <div id="actionNotice" class="action-notice" role="status" aria-live="polite"><span id="actionIcon">●</span> <span id="actionFeedback">Pregătit. Apasă un buton pentru o comandă.</span></div><section class="panel auto-panel" id="productionPanel"><div class="section-label">INDICATORI DE STARE · DOAR CITIRE</div><div class="auto-title"><h2>⚙ CICLU AUTOMAT · BANDĂ</h2><span id="autoStage" class="auto-state">OPRIT</span></div>
 <div class="auto-numbers"><div class="readonly-stat">TOTAL<strong id="pieceTotal">0</strong></div><div class="readonly-stat">OK<strong id="pieceOK">0</strong></div><div class="readonly-stat">NOK<strong id="pieceNOK">0</strong></div><div class="readonly-stat">INCERT<strong id="pieceUnknown">0</strong></div></div>
 <div id="autoLast" class="auto-result">AȘTEPTARE</div><div id="autoLog">Pornește camera, calibrează banda goală o singură dată, apoi activează AUTO.</div>
@@ -339,5 +437,101 @@ function setupControlFeedback(){
   syncUiIndicators();
 }
 setupControlFeedback();
+
+
+(function redesignUI(){
+  // Refolosim nodurile originale, nu le recreăm, pentru a păstra toate evenimentele și ID-urile.
+  const root=document.querySelector('main.app');
+  const header=root.querySelector('header');
+  const topFeedback=$('actionNotice');
+  const production=$('productionPanel');
+  const leftRight=root.querySelector('.layout');
+  const allPanels=[...leftRight.querySelectorAll(':scope > div > section.panel')];
+  const refPanel=allPanels.find(x=>x.querySelector('#refCanvas'));
+  const testPanel=allPanels.find(x=>x.querySelector('#testCanvas'));
+  const resultPanel=allPanels.find(x=>x.querySelector('#headline'));
+  const paramsPanel=allPanels.find(x=>x.querySelector('#minRatio'));
+  const helpPanel=allPanels.find(x=>x.querySelector('.steps'));
+  if(!refPanel||!testPanel||!resultPanel||!paramsPanel||!helpPanel)return;
+  const brand=header.querySelector('div:not(.engine-unit)');brand.classList.add('brand');
+  header.insertAdjacentHTML('afterbegin','<button id="menuToggle" type="button" aria-label="Deschide meniul de setări" aria-expanded="false">☰</button>');
+  const overlay=document.createElement('div');overlay.className='drawer-shade';overlay.hidden=true;
+  const drawer=document.createElement('aside');drawer.className='settings-drawer';drawer.setAttribute('aria-hidden','true');
+  drawer.innerHTML='<div class="drawer-top"><div><h2>Configurare & control</h2><p>Comenzile sunt separate de ecranul de producție</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div><nav class="drawer-tabs" aria-label="Pagini de configurare"><button class="navtab active" data-page="operate">▶ Operare</button><button class="navtab" data-page="model">◎ Etalon & găuri</button><button class="navtab" data-page="belt">⚙ Bandă</button><button class="navtab" data-page="test">◈ Test & diagnostic</button></nav><div class="drawer-body"><section class="drawer-page active" id="page-operate"><h3>Operare cameră</h3><p class="drawer-desc">Pornește camera, apoi activează inspecția automată după ce ai calibrat banda goală și etalonul.</p><div id="operateControls"></div><div id="operateStates"></div></section><section class="drawer-page" id="page-model"><h3>Piesa-etalon</h3><p class="drawer-desc">Încarcă o piesă bună, marchează găurile o singură dată și salvează etalonul.</p></section><section class="drawer-page" id="page-belt"><h3>Calibrare bandă</h3><p class="drawer-desc">Calibrează fără piesă, apoi reglează detectarea și stabilitatea imaginii.</p><div id="beltControls"></div></section><section class="drawer-page" id="page-test"><h3>Test și diagnostic</h3><p class="drawer-desc">Aliniere ORB, verificare manuală, inspectarea fiecărei găuri și parametrii de sensibilitate.</p></section></div>';
+  root.append(overlay,drawer);
+  const dashboard=document.createElement('div');dashboard.className='dashboard';
+  root.insertBefore(dashboard,topFeedback);
+  const summary=document.createElement('section');summary.className='summary';
+  summary.innerHTML='<div class="summary-top"><h2>Monitorizare producție</h2></div>';
+  const title=production.querySelector('.auto-title');
+  $('autoStage').parentNode.removeChild($('autoStage'));summary.querySelector('.summary-top').appendChild($('autoStage'));
+  title.remove();
+  summary.append(production.querySelector('.auto-numbers'),$('autoLast'),$('autoLog'));
+  dashboard.append(summary);
+  const monitor=document.createElement('section');monitor.className='monitor-panel';
+  monitor.innerHTML='<div class="monitor-head"><div><h2>Monitor cameră</h2><p>Piesa curentă sau ultima inspecție</p></div><div class="view-switch"><button id="showLive" class="current" type="button">LIVE</button><button id="showLast" type="button">ULTIMA</button></div></div><div id="monitorViewport" class="monitor-viewport"></div><div class="monitor-footer"><span id="cameraFlag" class="readout waiting">● CAMERA OPRITĂ</span><span id="orbFlag" class="readout waiting">● ORB ÎN AȘTEPTARE</span><span id="beltFlag" class="readout waiting">● BANDĂ NECALIBRATĂ</span></div>';
+  dashboard.append(monitor);
+  const viewport=monitor.querySelector('#monitorViewport');
+  const stage=testPanel.querySelector('.stage'),video=$('camera');
+  viewport.append(video,stage);
+  resultPanel.classList.add('result-panel');
+  resultPanel.querySelector('h2').textContent='Detaliile ultimei inspecții';
+  dashboard.append(resultPanel);
+  root.insertBefore(topFeedback,dashboard.nextSibling);
+  // Controale tehnice: mutate în meniul lateral, fără a pierde handler-ele.
+  const operate=drawer.querySelector('#operateControls');
+  const cameraActions=testPanel.querySelector('.actions');
+  operate.append(cameraActions);
+  const operateStates=drawer.querySelector('#operateStates');
+  operateStates.append(production.querySelector('.cal-readout:nth-of-type(2)')||$('cameraState').parentNode);
+  operateStates.append($('autoIndicator').parentNode);
+  const autoBtns=production.querySelector('.autobtns');
+  operate.append(autoBtns);
+  drawer.querySelector('#page-model').append(refPanel);
+  const beltControls=drawer.querySelector('#beltControls');
+  beltControls.append($('calBelt'));
+  beltControls.append($('beltState').parentNode);
+  beltControls.append(...production.querySelectorAll('.setting'));
+  beltControls.append(production.querySelector('.auto-help'));
+  const testPage=drawer.querySelector('#page-test');
+  const testActions=testPanel.querySelectorAll('.actions');
+  testPage.append(...testActions);
+  testPage.append(testPanel.querySelector('.manualBox'),testPanel.querySelector('.legend'),paramsPanel,helpPanel);
+  // Butonul de reset este separat de pornirea automată.
+  $('resetPieces').textContent='Resetează contoarele de piese';
+  $('calBelt').textContent='Calibrează banda goală';
+  $('startCamera').textContent='Pornește camera';
+  $('stopCamera').textContent='Oprește camera';
+  $('autoStart').textContent='Pornește inspecția automată';
+  // butonul AUTO își va modifica textul în funcție de stare
+  const pages=[...drawer.querySelectorAll('.drawer-page')];
+  const tabs=[...drawer.querySelectorAll('.navtab')];
+  function page(name){tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===name));pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+name));drawer.querySelector('.drawer-body').scrollTop=0;}
+  tabs.forEach(t=>t.onclick=()=>page(t.dataset.page));
+  function toggle(open){drawer.classList.toggle('open',open);drawer.setAttribute('aria-hidden',String(!open));overlay.hidden=!open;document.body.classList.toggle('menu-visible',open);$('menuToggle').setAttribute('aria-expanded',String(open));}
+  $('menuToggle').onclick=()=>toggle(true);$('drawerClose').onclick=()=>toggle(false);overlay.onclick=()=>toggle(false);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false);});
+  let selectedView='live';
+  function updateView(){
+    const live=selectedView==='live';
+    $('showLive').classList.toggle('current',live);$('showLast').classList.toggle('current',!live);
+    const hasVideo=!!stream && !!video.videoWidth;
+    video.classList.toggle('hidden',!(live&&hasVideo));
+    stage.classList.toggle('hidden',live&&hasVideo);
+    indicator('cameraFlag',hasVideo?'✓ CAMERA ACTIVĂ':'● CAMERA OPRITĂ',hasVideo?'ready':'waiting');
+    indicator('orbFlag',probeOrb()?'✓ ORB DISPONIBIL':'● ORB INDISPONIBIL',probeOrb()?'ready':'failure');
+    indicator('beltFlag',beltBase?'✓ BANDĂ CALIBRATĂ':'● BANDĂ NECALIBRATĂ',beltBase?'ready':'waiting');
+    $('autoStart').textContent=conveyorOn?'Oprește inspecția automată':'Pornește inspecția automată';
+    $('autoStart').classList.toggle('red',conveyorOn);
+    $('autoStart').classList.toggle('green',!conveyorOn);
+  }
+  $('showLive').onclick=()=>{selectedView='live';updateView();};
+  $('showLast').onclick=()=>{selectedView='last';updateView();};
+  setInterval(updateView,850);updateView();
+  root.querySelector('footer')?.remove();
+  leftRight.remove();production.remove();
+  // Meniul este închis implicit; etalonul și configurarea rămân disponibile la ☰.
+  page('operate');
+})();
 
 </script></body></html>
