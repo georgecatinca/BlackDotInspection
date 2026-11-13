@@ -456,6 +456,13 @@ $('autoAlign').onclick=async()=>{
    if(p)err+=Math.hypot(p.x-q[0],p.y-q[1]);
   }
   const fraction=good/points.length,meanError=good?err/good:Infinity;
+  const sourceInliers=points.filter((_,i)=>!!inliers.data[i]).map(x=>x.p);
+  const spread=sourceInliers.length?{
+    w:Math.max(...sourceInliers.map(p=>p[0]))-Math.min(...sourceInliers.map(p=>p[0])),
+    h:Math.max(...sourceInliers.map(p=>p[1]))-Math.min(...sourceInliers.map(p=>p[1]))
+  }:{w:0,h:0};
+  if(spread.w<refImg.width*.12&&spread.h<refImg.height*.12)
+    throw Error('Reperele ORB sunt concentrate într-o zonă prea mică; aliniere neconfirmată.');
   // Acceptăm mai puține puncte decât înainte, DAR numai cu transformare coerentă.
   if(good<7||fraction<.28||meanError>6)
    throw Error('Aliniere nesigură: '+good+'/'+points.length+' repere, eroare medie '+meanError.toFixed(1)+' px. Folosește P1–P4.');
@@ -804,7 +811,7 @@ setInterval(update,900);update();
     const tab=document.querySelector('#settingsDrawer .navtab[data-page="'+name+'"]');
     if(tab)tab.click();
   }
-  $id('manualRef').addEventListener('click',()=>{openPage('model');feedback('Selectează P1–P4 pe fotografia-etalon. Revino la Test pentru punctele piesei noi.','info');});
+  $id('manualRef').addEventListener('click',()=>{openPage('model');if(typeof showReferencePhoto==='function')showReferencePhoto(true);feedback('Selectează P1–P4 pe fotografia-etalon. Revino la Test pentru punctele piesei noi.','info');});
   $id('manualTest').addEventListener('click',()=>{openPage('test');showTest(false);feedback('Selectează P1–P4 pe fotografia de test, în aceeași ordine ca la etalon.','info');});
   const tabTest=document.querySelector('#settingsDrawer .navtab[data-page="test"]');
   if(tabTest)tabTest.addEventListener('click',()=>showTest(false));
