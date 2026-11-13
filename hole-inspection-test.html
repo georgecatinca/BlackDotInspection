@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1422"><title>Black Dot Inspection | V3.4 AUTO – Test și cameră</title><style>
+<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1422"><title>Black Dot Inspection | V3.5 AUTO – Aliniere și etalon LIVE</title><style>
 :root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0e1728;color:#f8fafc}.app{max-width:1080px;margin:auto;padding:12px}header{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:4px 0 14px}h1{font-size:clamp(18px,4vw,26px);margin:0}h2{font-size:17px;margin:0 0 9px}p{line-height:1.45}small,.muted{color:#b1c3db}.muted{font-size:12px}.tag{border-radius:99px;padding:6px 9px;background:#754b10;color:#fff;font-size:11px;font-weight:800}.tag.good{background:#176e42}.tag.bad{background:#9c2525}.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.8fr);gap:12px}.panel{background:#1b2a40;padding:14px;border-radius:13px;margin-bottom:12px}.stage{position:relative;background:#050a11;border:1px solid #63758c;border-radius:10px;overflow:hidden;margin:10px 0;touch-action:none;aspect-ratio:4/3}.stage canvas{display:block;width:100%;height:100%;object-fit:contain;touch-action:none}.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn,button,.file-button{border:0;border-radius:9px;background:#334860;color:#fff;font-weight:750;font-size:13px;padding:11px 13px;min-height:43px;cursor:pointer}.btn:disabled,button:disabled{opacity:.35;cursor:default}.primary{background:#2563eb}.green{background:#15803d}.red{background:#ad2b2b}.orange{background:#a16207}.file-button{display:inline-flex;align-items:center;gap:5px}.file-button input{display:none}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;border-radius:10px;background:#28384f;padding:10px 3px;font-size:12px;color:#cbd5e1}.stat strong{display:block;color:white;font-size:30px}.headline{background:#334155;padding:12px;text-align:center;border-radius:10px;font-weight:900;font-size:20px}.headline.good{background:#166534}.headline.bad{background:#991b1b}.headline.warn{background:#92400e}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.setting{display:flex;flex-direction:column;gap:5px;margin:13px 0}.setting label{font-size:13px}.setting input[type=range]{width:100%;accent-color:#60a5fa}.setting select{background:#26384e;color:white;border:1px solid #58697d;border-radius:9px;padding:9px}.steps{padding-left:21px;font-size:13px;color:#d1dce9;line-height:1.6}.list{display:grid;gap:7px;margin-top:9px;max-height:260px;overflow-y:auto}.hole{display:flex;justify-content:space-between;gap:6px;align-items:center;padding:8px;border-radius:9px;background:#26384e;font-size:13px}.hole span{flex:1}.hole button{min-height:30px;padding:5px 8px}.chip{font-size:11px;border-radius:99px;background:#7c4a11;padding:4px 7px}.chip.ok{background:#166534}.chip.nok{background:#991b1b}.statusline{color:#bcd3f5;min-height:35px;font-size:13px;line-height:1.4}.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.note{background:#1c3347;border-left:3px solid #f59e0b;border-radius:7px;padding:10px;font-size:12px}.hidden{display:none!important}.boxcheck{display:flex;align-items:center;gap:7px;font-size:13px}.boxcheck input{accent-color:#22c55e}.manualBox{border:1px dashed #64748b;border-radius:9px;padding:10px;margin:10px 0}.manualBox b{display:block;font-size:13px;margin-bottom:5px}#manualStageText{font-size:12px;color:#cbd5e1}.camera{width:100%;background:#020617;max-height:250px;border-radius:8px;margin-top:8px}.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:9px}.legend span{display:flex;align-items:center;gap:5px}.dot{width:11px;height:11px;border-radius:50%;display:inline-block}.okdot{background:#22c55e}.nokdot{background:#f87171}.pendingdot{background:#fbbf24}footer{text-align:center;font-size:11px;color:#9cb0cb;padding:15px}@media(max-width:750px){.layout{grid-template-columns:1fr}.app{padding:9px}.panel{padding:11px}header{align-items:flex-start}.stage{aspect-ratio:4/3}}
 
 .auto-panel{border:1px solid #3d5974}.auto-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}.auto-state{font-size:12px;color:#93c5fd;font-weight:800}.auto-numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}.auto-numbers>div{text-align:center;background:#28384f;padding:8px 2px;border-radius:8px;font-size:11px}.auto-numbers strong{display:block;font-size:26px;color:#fff}.auto-help{color:#becde0;font-size:12px}.autobtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.autobtns button{flex:1;min-width:130px}#autoLog{font-size:12px;color:#d2e5ff;min-height:2em}.auto-status-good{color:#86efac}.auto-status-warn{color:#fcd34d}.auto-result{font-size:21px;font-weight:900;text-align:center;background:#35455a;padding:12px;border-radius:9px;margin:8px 0}#autoLast.good{background:#166534}#autoLast.bad{background:#991b1b}#autoLast.warn{background:#92400e}@media(max-width:500px){.auto-numbers strong{font-size:23px}}
@@ -219,7 +219,7 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 .drawer-page .manualBox .actions{display:grid;grid-template-columns:1fr 1fr}
 </style></head>
 <body><main class="app">
-<header><button id="menuToggle" type="button" aria-label="Deschide meniul">☰</button><div style="flex:1;min-width:0"><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.4 · BANDĂ AUTOMATĂ</small></div><div class="engine-unit"><span id="engineStatus" class="readout waiting">● ORB SE ÎNCARCĂ</span><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
+<header><button id="menuToggle" type="button" aria-label="Deschide meniul">☰</button><div style="flex:1;min-width:0"><h1>BLACK DOT INSPECTION</h1><small>HOLE INSPECTION V3.5 · ALINIERE ADAPTIVĂ</small></div><div class="engine-unit"><span id="engineStatus" class="readout waiting">● ORB SE ÎNCARCĂ</span><span id="engineBadge" class="hidden" aria-hidden="true">Pornire motor…</span></div></header>
 <div id="menuBackdrop" class="drawer-shade" hidden></div>
 <aside class="settings-drawer" id="settingsDrawer" aria-label="Setări și control" aria-hidden="true">
 <div class="drawer-top"><div><h2>Configurare & control</h2><p>Butoanele de operare, calibrare și diagnostic</p></div><button id="drawerClose" type="button" aria-label="Închide meniul">✕</button></div>
@@ -230,7 +230,12 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 <section class="panel"><h2>Inspecție automată</h2><div class="autobtns"><button id="autoStart" class="green">Pornește inspecția automată</button><button id="resetPieces" class="red">Resetează contoarele</button></div><div class="cal-readout">Auto: <span id="autoIndicator" class="readout waiting">● OPRIT</span></div></section>
 <section class="panel"><h2>Pregătirea sistemului</h2><div class="cal-readout">Bandă: <span class="readout waiting" id="operateBelt">● NECALIBRATĂ</span></div><div class="cal-readout">Etalon: <span id="modelState" class="readout waiting">● NEÎNCĂRCAT</span></div><div class="cal-readout">ORB: <span id="operateORB" class="readout waiting">● ÎN AȘTEPTARE</span></div><button id="orbRetry" type="button" class="primary">↻ Reîncearcă ORB</button></section></section>
 <section class="drawer-page" id="page-model"><h3>Etalon & găuri</h3><p class="drawer-desc">O singură calibrare cu o piesă bună. Marchezi toate găurile, salvezi, iar următoarele piese se aliniază automat.</p>
-<section class="panel"><div class="actions"><label class="file-button primary">📷 Încarcă piesa-etalon<input id="refFile" type="file" accept="image/*"></label><button id="clearModel" class="red">Șterge etalonul</button></div><div class="stage"><canvas id="refCanvas" width="800" height="600"></canvas></div><div class="row"><b id="refCount">0 găuri definite</b><small>Atinge centrul găurilor</small></div>
+<section class="panel"><h2>Cameră / fotografie etalon</h2>
+<div class="actions"><button id="refCameraStart" type="button" class="green">▶ Pornește camera</button><button id="refCameraStop" type="button">■ Oprește camera</button><button id="refCapture" type="button" class="primary">📸 Fotografiază etalon</button></div>
+<div class="test-toggle"><button id="refShowLive" type="button" class="selected">Camera LIVE</button><button id="refShowPhoto" type="button">Fotografia etalon</button></div>
+<div class="preview-frame ref-preview-frame"><canvas id="refLivePreview" width="640" height="480"></canvas><div class="stage hidden" id="refPhotoStage"><canvas id="refCanvas" width="800" height="600"></canvas></div></div>
+<div class="actions" style="margin-top:12px"><label class="file-button primary">📂 Încarcă fotografie etalon<input id="refFile" type="file" accept="image/*"></label><button id="clearModel" class="red">Șterge etalonul</button></div>
+<p class="muted" id="refHelp">După captură sau încărcare, selectează „Fotografia etalon” și atinge găurile. Poți reface fotografia oricând (marcajele vechi se vor reseta).</p><div class="row"><b id="refCount">0 găuri definite</b><small>Atinge centrul găurilor</small></div>
 <div class="split"><button id="toolCircle" class="primary">● Gaură rotundă</button><button id="toolRect">▭ Decupaj</button></div><div class="setting"><label>Diametru / latură marcaj: <b id="radiusLabel">16</b> px</label><input id="radius" type="range" min="3" max="100" value="16"></div><div class="actions"><button id="undo">↶ Anulează ultima</button><button id="saveModel" class="green">💾 Salvează etalon</button></div></section></section>
 <section class="drawer-page" id="page-belt"><h3>Bandă transportoare</h3><p class="drawer-desc">Cu camera pornită și banda fără piesă, salvează imaginea fundalului.</p>
 <section class="panel"><h2>Imagine LIVE – calibrare bandă</h2>
@@ -321,7 +326,13 @@ $('toolRect').onclick=()=>{clickMode='hole';holeShape='rect';$('toolRect').class
 $('radius').oninput=()=>{$('radiusLabel').textContent=$('radius').value};
 $('undo').onclick=()=>{holes.pop();grading=[];drawRef();drawTest();};
 $('clearModel').onclick=()=>{if(!confirm('Ștergi etalonul și găurile definite?'))return;refImg=null;holes=[];refPts=[];Hmat=null;alignedImage=null;grading=[];localStorage.removeItem('bdi_holes_v1');drawRef();drawTest();updateCounter();result('AȘTEPTARE ETALON');message('Etalon șters.');};
-$('refFile').onchange=async e=>{try{refImg=fitImage(await loadImage(e.target.files[0]));holes=[];refPts=[];grading=[];Hmat=null;alignedImage=null;drawRef();drawTest();result('MARCAȚI GĂURILE');message('Etalon încărcat. Atinge fiecare gaură și ajustează diametrul marcajului.');}catch(err){message(err.message);}};
+function setReferenceImage(source){
+ refImg=fitImage(source);holes=[];refPts=[];grading=[];Hmat=null;alignedImage=null;
+ drawRef();drawTest();result('MARCAȚI GĂURILE');
+ message('Etalon actualizat. Selectează fotografia etalon, marchează toate găurile și apasă Salvează.');
+ if(typeof showReferencePhoto==='function')showReferencePhoto(true);
+}
+$('refFile').onchange=async e=>{try{setReferenceImage(await loadImage(e.target.files[0]));e.target.value='';}catch(err){message(err.message);}};
 $('testFile').onchange=async e=>{try{testImg=fitImage(await loadImage(e.target.files[0]));testPts=[];grading=[];Hmat=null;alignedImage=null;drawTest();result('NEALINIATĂ');message('Fotografia test a fost încărcată. Aliniază automat sau manual.');}catch(err){message(err.message);}};
 $('manualRef').onclick=()=>{clickMode='refpoints';refPts=[];drawRef();message('Apasă 4 puncte pe imaginea etalon, în ordine, de preferat colțuri asimetrice ale piesei.');};
 $('manualTest').onclick=()=>{clickMode='testpoints';testPts=[];drawTest();message('Apasă aceleași 4 puncte pe fotografia test, în exact aceeași ordine, chiar dacă piesa este rotită.');};
@@ -349,7 +360,8 @@ function serializeModel(){if(!refImg||!holes.length)throw Error('Nu ai etalon ș
 $('saveModel').onclick=()=>{try{const o=serializeModel();localStorage.setItem('bdi_holes_v1',JSON.stringify(o));message('Etalon salvat local pe acest dispozitiv.');}catch(e){message('Nu pot salva: '+e.message+' (fotografia poate fi prea mare).')}};
 try{const model=JSON.parse(localStorage.getItem('bdi_holes_v1')||'null');if(model?.refData){const im=new Image();im.onload=()=>{refImg=fitImage(im);holes=model.holes||[];drawRef();message('Etalonul salvat anterior a fost încărcat.');result('ETALON ÎNCĂRCAT','warn');};im.src=model.refData;}}catch(e){message('Etalonul salvat nu poate fi citit.');}
 $('startCamera').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('camera').srcObject=stream;$('camera').classList.remove('hidden');await $('camera').play();message('Cameră pornită. Așază piesa complet în cadru și apasă Capturează.');}catch(e){message('Camera nu poate porni: '+e.message);}};
-$('snapCamera').onclick=()=>{const v=$('camera');if(!stream||!v.videoWidth){message('Pornește camera mai întâi.');return;}const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);testImg=fitImage(c);Hmat=null;alignedImage=null;grading=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');};
+function cameraSnapshot(){const v=$('camera');if(!stream||!v.videoWidth)throw Error('Pornește camera mai întâi.');const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);return c;}
+$('snapCamera').onclick=()=>{try{testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');}catch(e){message(e.message);}};
 $('stopCamera').onclick=()=>{stopConveyor();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}$('camera').srcObject=null;$('camera').classList.add('hidden');};window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
 // Încărcare OpenCV cu încercări limitate și mesaje explicite.
 // IMPORTANT: OpenCV rămâne necesar pentru ORB; fără internet la prima deschidere, afișăm EROARE, nu blocăm aplicația.
@@ -667,6 +679,45 @@ setInterval(update,900);update();
   const tabTest=document.querySelector('#settingsDrawer .navtab[data-page="test"]');
   if(tabTest)tabTest.addEventListener('click',()=>showTest(false));
   setInterval(refresh,650);refresh();
+})();
+
+
+/* V3.5: Etalonul poate fi fotografiat direct cu camera live. */
+let showReferencePhoto=null;
+(function referenceCameraUX(){
+ const live=$('refLivePreview'),ctx=live.getContext('2d'),photo=$('refPhotoStage');
+ let photoMode=false;
+ showReferencePhoto=function(value){
+  photoMode=!!value;
+  photo.classList.toggle('hidden',!photoMode);
+  live.classList.toggle('hidden',photoMode);
+  $('refShowPhoto').classList.toggle('selected',photoMode);
+  $('refShowLive').classList.toggle('selected',!photoMode);
+ };
+ $('refCameraStart').onclick=()=>{$('startCamera').click();showReferencePhoto(false);};
+ $('refCameraStop').onclick=()=>$('stopCamera').click();
+ $('refCapture').onclick=()=>{
+  try{setReferenceImage(cameraSnapshot());showReferencePhoto(true);
+    feedback('Fotografie etalon capturată. Marchează găurile și salvează etalonul.','success');
+  }catch(e){message('Nu pot captura etalonul: '+e.message);}
+ };
+ $('refShowLive').onclick=()=>showReferencePhoto(false);
+ $('refShowPhoto').onclick=()=>showReferencePhoto(true);
+ function frame(){
+  if(!photoMode){
+   ctx.fillStyle='#050b15';ctx.fillRect(0,0,live.width,live.height);
+   const video=$('camera');
+   if(stream&&video.videoWidth>0){
+    const k=Math.min(live.width/video.videoWidth,live.height/video.videoHeight);
+    const w=video.videoWidth*k,h=video.videoHeight*k;
+    try{ctx.drawImage(video,(live.width-w)/2,(live.height-h)/2,w,h);}catch(e){}
+   }else{ctx.fillStyle='#8ca5c0';ctx.font='17px system-ui';ctx.textAlign='center';ctx.fillText('Camera oprită',live.width/2,live.height/2);ctx.textAlign='left';}
+  }
+ }
+ const originalLoad=$('refFile').onchange;
+ $('refFile').onchange=async e=>{await originalLoad(e);showReferencePhoto(true);};
+ showReferencePhoto(!!refImg);
+ setInterval(frame,450);
 })();
 
 </script></body></html>
