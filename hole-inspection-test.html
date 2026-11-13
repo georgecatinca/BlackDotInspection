@@ -219,6 +219,9 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 .drawer-page .manualBox .actions{display:grid;grid-template-columns:1fr 1fr}
 
  .preview-frame>.stage.hidden,.preview-frame>canvas.hidden,.ref-preview-frame>.stage.hidden{display:none!important}
+ .ref-live-small{aspect-ratio:16/7;max-height:185px;margin-bottom:9px}
+.ref-live-small canvas{object-fit:contain}
+.ref-preview-frame{margin-bottom:9px}
 .saved-reference-panel{margin-top:12px;padding:12px;border:1px solid #42638a;border-radius:13px;background:#17283d}
 .saved-reference-panel h3{font-size:14px;margin:0 0 7px}
 .saved-reference-panel #closeSavedReference{margin-top:10px;width:100%}
@@ -239,12 +242,12 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 <section class="drawer-page active" id="page-operate"><h3>Operare</h3><p class="drawer-desc">Pornește camera, calibrează banda, apoi activează AUTO. Toate comenzile sunt aici.</p>
 <section class="panel"><h2>Cameră</h2><div class="actions"><button id="startCamera" class="green">▶ Pornește camera</button><button id="stopCamera">■ Oprește camera</button><button id="checkCurrent" type="button" class="primary">◎ Verifică piesa actuală</button><button id="snapCamera" class="hidden" aria-hidden="true" tabindex="-1">Capturează fotografie test</button></div><div class="cal-readout">Cameră: <span id="cameraState" class="readout waiting">● OPRITĂ</span></div></section>
 <section class="panel"><h2>Inspecție automată</h2><div class="autobtns"><button id="autoStart" class="green">Pornește inspecția automată</button><button id="resetPieces" class="red">Resetează contoarele</button></div><div class="cal-readout">Auto: <span id="autoIndicator" class="readout waiting">● OPRIT</span></div></section>
-<section class="panel"><h2>Pregătirea sistemului</h2><div class="cal-readout">Bandă: <span class="readout waiting" id="operateBelt">● NECALIBRATĂ</span></div><div class="cal-readout">Etalon: <span id="modelState" class="readout waiting">● NEÎNCĂRCAT</span></div><div class="cal-readout">Masă / zonă de lucru: <span id="operateTable" class="readout waiting">● NECALIBRATĂ</span></div><div class="cal-readout">ORB: <span id="operateORB" class="readout waiting">● ÎN AȘTEPTARE</span></div><button id="orbRetry" type="button" class="primary">↻ Reîncearcă ORB</button></section></section>
+<section class="panel"><h2>Pregătirea sistemului</h2><div class="cal-readout">Bandă: <span class="readout waiting" id="operateBelt">● NECALIBRATĂ</span></div><div class="cal-readout">Etalon: <span id="modelState" class="readout waiting">● NEÎNCĂRCAT</span></div><div class="cal-readout">Masă / fundal: <span id="operateTable" class="readout waiting">● NECALIBRATĂ</span></div><div class="cal-readout">ORB: <span id="operateORB" class="readout waiting">● ÎN AȘTEPTARE</span></div><button id="orbRetry" type="button" class="primary">↻ Reîncearcă ORB</button></section></section>
 <section class="drawer-page" id="page-model"><h3>Etalon & găuri</h3><p class="drawer-desc">O singură calibrare cu o piesă bună. Marchezi toate găurile, salvezi, iar următoarele piese se aliniază automat.</p>
 <section class="panel"><h2>Imagine etalon</h2>
 <div class="actions"><label class="file-button primary">📂 Încarcă etalon<input id="refFile" type="file" accept="image/*"></label><button id="refCapture" type="button" class="primary">📸 Fotografiază etalon</button><button id="clearModel" class="red">Șterge etalon</button></div>
-<div class="test-toggle"><button id="refShowLive" type="button" class="selected">LIVE pentru fotografiere</button><button id="refShowPhoto" type="button">Ultimul etalon</button></div>
-<div class="preview-frame ref-preview-frame"><canvas id="refLivePreview" width="640" height="480"></canvas><div class="stage hidden" id="refPhotoStage"><canvas id="refCanvas" width="800" height="600"></canvas></div></div>
+<div class="section-label">PREVIZUALIZARE LIVE · CAMERA COMUNĂ</div><div class="preview-frame ref-live-small"><canvas id="refLivePreview" width="640" height="480"></canvas></div>
+<div class="section-label">FOTOGRAFIE ETALON · ATINGE GĂURILE</div><div class="preview-frame ref-preview-frame"><div class="stage" id="refPhotoStage"><canvas id="refCanvas" width="800" height="600"></canvas></div></div>
 <p class="muted" id="refHelp">Camera se pornește numai din Operare. Fotografiază sau încarcă etalonul, apoi marchează găurile în imagine. O fotografie nouă înlocuiește etalonul curent și resetează marcajele nesalvate.</p><div class="row"><b id="refCount">0 găuri definite</b><small>Atinge centrul găurilor</small></div>
 <div class="split"><button id="toolCircle" class="primary">● Gaură rotundă</button><button id="toolRect">▭ Decupaj</button></div><div class="setting"><label>Diametru / latură marcaj: <b id="radiusLabel">16</b> px</label><input id="radius" type="range" min="3" max="100" value="16"></div><div class="actions"><button id="undo">↶ Anulează ultima</button><button id="saveModel" class="green">💾 Salvează etalon</button><button id="viewSavedModel" type="button" class="primary">👁 Vizualizează etalonul salvat</button></div></section></section>
 <section class="drawer-page" id="page-belt"><h3>Bandă transportoare</h3><p class="drawer-desc">Cu camera pornită și banda fără piesă, salvează imaginea fundalului.</p>
@@ -808,7 +811,7 @@ function update(){
   indicator('modelState',refImg&&holes.length?'✓ '+holes.length+' GĂURI DEFINITE':'● ETALON INCOMPLET',refImg&&holes.length?'ready':'waiting');
   indicator('operateORB',probeOrb()?'✓ PREGĂTIT':'● INDISPONIBIL',probeOrb()?'ready':'failure');
   indicator('operateBelt',beltBase?'✓ CALIBRATĂ':'● NECALIBRATĂ',beltBase?'ready':'waiting');
-  indicator('operateTable','● FĂRĂ CALIBRARE SEPARATĂ','waiting');
+  indicator('operateTable',beltBase?'✓ FUNDAL CALIBRAT':'● FUNDAL NECALIBRAT',beltBase?'ready':'waiting');
   $('autoStart').textContent=conveyorOn?'Oprește inspecția automată':'Pornește inspecția automată';
   $('autoStart').classList.toggle('red',conveyorOn);
   $('autoStart').classList.toggle('green',!conveyorOn);
@@ -944,24 +947,16 @@ let showReferencePhoto=null;
 
 (function referenceCameraUX(){
  const live=$('refLivePreview'),ctx=live.getContext('2d'),photo=$('refPhotoStage');
- let photoMode=false;
- showReferencePhoto=function(value){
-  photoMode=!!value;
-  photo.classList.toggle('hidden',!photoMode);
-  live.classList.toggle('hidden',photoMode);
-  $('refShowPhoto').classList.toggle('selected',photoMode);
-  $('refShowLive').classList.toggle('selected',!photoMode);
- };
+
+ showReferencePhoto=function(){photo.classList.remove('hidden');live.classList.remove('hidden');};
  // Camera se pornește doar din Operare.
  $('refCapture').onclick=()=>{
   try{setReferenceImage(cameraSnapshot());showReferencePhoto(true);
     feedback('Fotografie etalon capturată. Marchează găurile și salvează etalonul.','success');
   }catch(e){message('Nu pot captura etalonul: '+e.message);}
  };
- $('refShowLive').onclick=()=>showReferencePhoto(false);
- $('refShowPhoto').onclick=()=>showReferencePhoto(true);
  function frame(){
-  if(!photoMode){
+  {
    ctx.fillStyle='#050b15';ctx.fillRect(0,0,live.width,live.height);
    const video=$('camera');
    if(stream&&video.videoWidth>0){
@@ -973,8 +968,7 @@ let showReferencePhoto=null;
  }
  const originalLoad=$('refFile').onchange;
  $('refFile').onchange=async e=>{await originalLoad(e);showReferencePhoto(true);};
- showReferencePhoto(!!refImg);
+ showReferencePhoto();
  setInterval(frame,450);
 })();
 
-</script></body></html>
