@@ -596,6 +596,43 @@ $('calBelt').onclick=()=>{if(conveyorOn){autoText('ATENȚIE','Oprește AUTO îna
 function stopConveyor(){conveyorOn=false;conveyorBusy=false;conveyorState='IDLE';clearTimeout(conveyorTimer);conveyorTimer=null;$('autoStart').textContent='2. AUTO INSPECT: OFF';$('autoStart').className='green';autoText('OPRIT','Modul automat este oprit. Camera poate rămâne pornită.');}
 $('autoStart').onclick=()=>{if(conveyorOn){stopConveyor();return;}if(!stream||!$('camera').videoWidth){autoText('NU POATE PORNI','Pornește camera.');return;}if(!refImg||!holes.length){autoText('NU POATE PORNI','Încarcă etalonul și marchează toate găurile care trebuie controlate.');return;}if(!beltBase){autoText('NU POATE PORNI','Calibrează mai întâi banda goală, fără piesă.');return;}if(!probeOrb()){autoText('ÎNCARC ORB','Motorul nu este pregătit. Reîncerc încărcarea; apasă din nou AUTO când indicatorul este verde.');cvInit();return;}conveyorOn=true;conveyorState='WAIT';lastMotionFrame=null;presenceFrames=0;stableFrames=0;absenceFrames=0;$('autoStart').textContent='2. AUTO INSPECT: ON';$('autoStart').className='red';autoResult('AȘTEPTARE PIESĂ','warn');autoText('MONITORIZARE','Aștept sosirea unei piese noi pe bandă.');scheduleConveyor(100);};
 function scheduleConveyor(delay=300){clearTimeout(conveyorTimer);if(conveyorOn)conveyorTimer=setTimeout(conveyorTick,delay);}
+let manualRecheckBusy=false;
+async function verifyCurrentCameraPiece(){
+ if(manualRecheckBusy||conveyorBusy){feedback('O inspecție este deja în curs. Așteaptă finalizarea.','info');return;}
+ if(!stream||!$('camera').videoWidth){feedback('Pornește camera din Operare înainte de verificare.','error');return;}
+ if(!refImg||!holes.length){feedback('Încarcă și salvează un etalon cu găuri marcate.','error');return;}
+ manualRecheckBusy=true;conveyorBusy=true;
+ $('recheckCurrent').disabled=true;$('checkCurrent').disabled=true;
+ const before=conveyorState;
+ autoResult('REVERIFICARE ÎN CURS','warn');
+ autoText('VERIFICARE MANUALĂ','Analizez cadrul actual, fără să modific contoarele.');
+ try{
+  testImg=captureWorkFrame();testPts=[];resetRecognition();drawTest();
+  await $('autoAlign').onclick();
+  if(Hmat&&alignedImage)$('run').onclick();
+  const verdict=$('headline').textContent;
+  if(!Hmat||!alignedImage){
+   autoResult('INCERT – ALINIERE NEREUȘITĂ','warn');
+   autoText('REVERIFICARE','Piesa actuală nu a putut fi aliniată: '+$('status').textContent+' · Nu am modificat contoarele.');
+  }else{
+   const good=$('headline').classList.contains('good'),bad=$('headline').classList.contains('bad');
+   autoResult('REVERIFICARE: '+verdict,good?'good':bad?'bad':'warn');
+   autoText('REVERIFICARE FINALIZATĂ','Fotografia actuală a fost verificată din nou. TOTAL/OK/NOK/INCERT nu s-au modificat.');
+  }
+  // Păstrează rezultatul vizibil în monitor.
+  $('showLast').click();
+ }catch(e){
+  autoResult('REVERIFICARE EȘUATĂ','warn');
+  autoText('EROARE','Nu am putut analiza cadrul curent: '+(e?.message||String(e)));
+ }finally{
+  manualRecheckBusy=false;conveyorBusy=false;
+  if(conveyorOn)conveyorState=before;
+  $('recheckCurrent').disabled=false;$('checkCurrent').disabled=false;
+ }
+}
+$('recheckCurrent').onclick=verifyCurrentCameraPiece;
+$('checkCurrent').onclick=verifyCurrentCameraPiece;
+
 async function inspectConveyorPiece(){if(!conveyorOn||conveyorBusy)return;conveyorBusy=true;conveyorState='PROCESSING';autoText('INSPECȚIE','Piesă stabilă. Aliniez la etalon, apoi verific găurile.');autoResult('ANALIZĂ ÎN CURS','warn');
 const captured=captureWorkFrame();testImg=captured;resetRecognition();drawTest();
 // Permite actualizarea interfeței înaintea calculului ORB (un singur calcul per piesă).
