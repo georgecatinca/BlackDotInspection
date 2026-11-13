@@ -218,6 +218,10 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 .drawer-page .manualBox summary{cursor:pointer;padding:10px;background:#203650;border-radius:9px}
 .drawer-page .manualBox .actions{display:grid;grid-template-columns:1fr 1fr}
 
+ .preview-frame>.stage.hidden,.preview-frame>canvas.hidden,.ref-preview-frame>.stage.hidden{display:none!important}
+.saved-reference-panel{margin-top:12px;padding:12px;border:1px solid #42638a;border-radius:13px;background:#17283d}
+.saved-reference-panel h3{font-size:14px;margin:0 0 7px}
+.saved-reference-panel #closeSavedReference{margin-top:10px;width:100%}
 .recheck-btn{width:100%;min-height:48px!important;border:1px solid #63b4ff!important;background:#225a9c!important;color:#fff!important;border-radius:12px!important;font-weight:850;box-shadow:none!important;margin-top:11px}
 .recheck-btn:disabled{opacity:.48}
 #page-model .actions>button,#page-model .actions>.file-button{flex:1 1 125px}
@@ -500,9 +504,9 @@ else{const direction=polarity==='dark'?-1:polarity==='bright'?1:Math.sign(a.delt
 grading.push(state);details.push('H'+String(i+1).padStart(2,'0')+': '+state+' — '+why);});$('ok').textContent=ok;$('nok').textContent=nok;drawTest();updateCounter();if(uncertain)result('NECONCLUDENT – '+uncertain+' GĂURI','warn');else if(nok)result('NOK – '+nok+' GĂURI','bad');else result('OK – TOATE '+ok+' GĂURILE','good');message(details.join(' | '));$('status').title=details.join('\n');};
 for(const id of ['minRatio','contrast'])$(id).oninput=()=>{$(id==='minRatio'?'minRatioOut':'contrastOut').textContent=$(id).value+(id==='minRatio'?'%':'');};
 function serializeModel(){if(!refImg||!holes.length)throw Error('Nu ai etalon și găuri definite.');return{v:1,holes,refData:refImg.toDataURL('image/jpeg',.85)}}
-$('saveModel').onclick=()=>{try{const o=serializeModel();localStorage.setItem('bdi_holes_v1',JSON.stringify(o));message('Etalon salvat local pe acest dispozitiv.');}catch(e){message('Nu pot salva: '+e.message+' (fotografia poate fi prea mare).')}};
+$('saveModel').onclick=()=>{try{const o=serializeModel();localStorage.setItem('bdi_holes_v1',JSON.stringify(o));message('Etalon salvat local pe acest dispozitiv.');feedback('Etalon salvat: '+holes.length+' poziții definite.','success');}catch(e){message('Nu pot salva: '+e.message+' (fotografia poate fi prea mare).')}};
 try{const model=JSON.parse(localStorage.getItem('bdi_holes_v1')||'null');if(model?.refData){const im=new Image();im.onload=()=>{refImg=fitImage(im);holes=model.holes||[];drawRef();message('Etalonul salvat anterior a fost încărcat.');result('ETALON ÎNCĂRCAT','warn');};im.src=model.refData;}}catch(e){message('Etalonul salvat nu poate fi citit.');}
-$('startCamera').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('camera').srcObject=stream;$('camera').classList.remove('hidden');await $('camera').play();message('Cameră pornită. Așază piesa complet în cadru și apasă Capturează.');}catch(e){message('Camera nu poate porni: '+e.message);}};
+$('startCamera').onclick=async()=>{if(stream&&$('camera').videoWidth){message('Camera este deja pornită.');return;}try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('camera').srcObject=stream;$('camera').classList.remove('hidden');await $('camera').play();message('Camera este pornită. Poți fotografia etalonul, calibra banda sau verifica piesa actuală.');}catch(e){message('Camera nu poate porni: '+e.message);}};
 function cameraSnapshot(){const v=$('camera');if(!stream||!v.videoWidth)throw Error('Pornește camera mai întâi.');const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);return c;}
 $('snapCamera').onclick=()=>{try{testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');}catch(e){message(e.message);}};
 $('stopCamera').onclick=()=>{stopConveyor();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}$('camera').srcObject=null;$('camera').classList.add('hidden');};window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
@@ -720,6 +724,7 @@ function update(){
   indicator('modelState',refImg&&holes.length?'✓ '+holes.length+' GĂURI DEFINITE':'● ETALON INCOMPLET',refImg&&holes.length?'ready':'waiting');
   indicator('operateORB',probeOrb()?'✓ PREGĂTIT':'● INDISPONIBIL',probeOrb()?'ready':'failure');
   indicator('operateBelt',beltBase?'✓ CALIBRATĂ':'● NECALIBRATĂ',beltBase?'ready':'waiting');
+  indicator('operateTable','● FĂRĂ CALIBRARE SEPARATĂ','waiting');
   $('autoStart').textContent=conveyorOn?'Oprește inspecția automată':'Pornește inspecția automată';
   $('autoStart').classList.toggle('red',conveyorOn);
   $('autoStart').classList.toggle('green',!conveyorOn);
@@ -758,7 +763,7 @@ setInterval(update,900);update();
     last.classList.toggle('hidden',mainLive&&active);
     $id('showLive').classList.toggle('current',mainLive);
     $id('showLast').classList.toggle('current',!mainLive);
-    $id('beltPreviewStatus').textContent=active?'✓ Cameră LIVE':'● Camera oprită – pornește din Operare sau aici';
+    $id('beltPreviewStatus').textContent=active?'✓ Cameră LIVE':'● Camera oprită – pornește din Operare';
     try{
       if(active){
         const aspect=v.videoWidth/v.videoHeight;
@@ -825,6 +830,34 @@ setInterval(update,900);update();
 
 /* V3.5: Etalonul poate fi fotografiat direct cu camera live. */
 let showReferencePhoto=null;
+
+(function savedReferenceViewer(){
+ const host=document.createElement('div');
+ host.id='savedReferencePanel';
+ host.className='saved-reference-panel hidden';
+ host.innerHTML='<h3>Etalonul salvat pe acest dispozitiv</h3><p id="savedReferenceText" class="muted">—</p><div class="preview-frame"><canvas id="savedReferenceCanvas" width="800" height="600"></canvas></div><button id="closeSavedReference" type="button">Închide vizualizarea</button>';
+ $('viewSavedModel').insertAdjacentElement('afterend',host);
+ const c=$('savedReferenceCanvas'),ctx=c.getContext('2d');
+ $('closeSavedReference').onclick=()=>host.classList.add('hidden');
+ $('viewSavedModel').onclick=()=>{
+  let m=null;try{m=JSON.parse(localStorage.getItem('bdi_holes_v1')||'null');}catch(e){}
+  if(!m||!m.refData){message('Nu există încă un etalon salvat. Marchează găurile și apasă Salvează etalon.');return;}
+  const im=new Image();
+  im.onload=()=>{
+   c.width=im.naturalWidth;c.height=im.naturalHeight;ctx.drawImage(im,0,0);
+   (m.holes||[]).forEach((h,i)=>{
+    ctx.strokeStyle='#47de90';ctx.fillStyle='#47de90';ctx.lineWidth=Math.max(2,c.width/500);
+    ctx.beginPath();if(h.shape==='rect')ctx.rect(h.x-h.r,h.y-h.r,h.r*2,h.r*2);else ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.stroke();
+    ctx.font='bold '+Math.max(15,c.width/70)+'px sans-serif';ctx.fillText('H'+String(i+1).padStart(2,'0'),h.x+h.r+3,h.y);
+   });
+   $('savedReferenceText').textContent='Ultimul etalon salvat · '+(m.holes||[]).length+' găuri/decupaje. Vizualizare fără modificarea etalonului curent.';
+   host.classList.remove('hidden');host.scrollIntoView({block:'nearest',behavior:'smooth'});
+  };
+  im.onerror=()=>message('Etalonul salvat nu poate fi citit.');
+  im.src=m.refData;
+ };
+})();
+
 (function referenceCameraUX(){
  const live=$('refLivePreview'),ctx=live.getContext('2d'),photo=$('refPhotoStage');
  let photoMode=false;
