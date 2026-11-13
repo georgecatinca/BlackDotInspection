@@ -240,7 +240,7 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 <nav class="drawer-tabs"><button class="navtab active" type="button" data-page="operate">▶ Operare</button><button class="navtab" type="button" data-page="model">◎ Etalon & găuri</button><button class="navtab" type="button" data-page="belt">⚙ Bandă</button><button class="navtab" type="button" data-page="test">◈ Test & diagnostic</button></nav>
 <div class="drawer-body">
 <section class="drawer-page active" id="page-operate"><h3>Operare</h3><p class="drawer-desc">Pornește camera, calibrează banda, apoi activează AUTO. Toate comenzile sunt aici.</p>
-<section class="panel"><h2>Cameră</h2><div class="actions"><button id="startCamera" class="green">▶ Pornește camera</button><button id="stopCamera">■ Oprește camera</button><button id="checkCurrent" type="button" class="primary">◎ Verifică piesa actuală</button><button id="snapCamera" class="hidden" aria-hidden="true" tabindex="-1">Capturează fotografie test</button></div><div class="cal-readout">Cameră: <span id="cameraState" class="readout waiting">● OPRITĂ</span></div></section>
+<section class="panel"><h2>Cameră</h2><div class="actions"><button id="startCamera" class="green">▶ Pornește camera</button><button id="stopCamera">■ Oprește camera</button><button id="checkCurrent" type="button" class="primary">◎ Verifică piesa actuală</button></div><div class="cal-readout">Cameră: <span id="cameraState" class="readout waiting">● OPRITĂ</span></div></section>
 <section class="panel"><h2>Inspecție automată</h2><div class="autobtns"><button id="autoStart" class="green">Pornește inspecția automată</button><button id="resetPieces" class="red">Resetează contoarele</button></div><div class="cal-readout">Auto: <span id="autoIndicator" class="readout waiting">● OPRIT</span></div></section>
 <section class="panel"><h2>Pregătirea sistemului</h2><div class="cal-readout">Bandă: <span class="readout waiting" id="operateBelt">● NECALIBRATĂ</span></div><div class="cal-readout">Etalon: <span id="modelState" class="readout waiting">● NEÎNCĂRCAT</span></div><div class="cal-readout">Masă / fundal: <span id="operateTable" class="readout waiting">● NECALIBRATĂ</span></div><div class="cal-readout">ORB: <span id="operateORB" class="readout waiting">● ÎN AȘTEPTARE</span></div><button id="orbRetry" type="button" class="primary">↻ Reîncearcă ORB</button></section></section>
 <section class="drawer-page" id="page-model"><h3>Etalon & găuri</h3><p class="drawer-desc">O singură calibrare cu o piesă bună. Marchezi toate găurile, salvezi, iar următoarele piese se aliniază automat.</p>
@@ -558,7 +558,7 @@ $('saveModel').onclick=()=>{try{const o=serializeModel();localStorage.setItem('b
 try{const model=JSON.parse(localStorage.getItem('bdi_holes_v1')||'null');if(model?.refData){const im=new Image();im.onload=()=>{refImg=fitImage(im);holes=model.holes||[];drawRef();message('Etalonul salvat anterior a fost încărcat.');result('ETALON ÎNCĂRCAT','warn');};im.src=model.refData;}}catch(e){message('Etalonul salvat nu poate fi citit.');}
 $('startCamera').onclick=async()=>{if(stream&&$('camera').videoWidth){message('Camera este deja pornită.');return;}try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('camera').srcObject=stream;$('camera').classList.remove('hidden');await $('camera').play();message('Camera este pornită. Poți fotografia etalonul, calibra banda sau verifica piesa actuală.');}catch(e){message('Camera nu poate porni: '+e.message);}};
 function cameraSnapshot(){const v=$('camera');if(!stream||!v.videoWidth)throw Error('Pornește camera mai întâi.');const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);return c;}
-$('snapCamera').onclick=()=>{try{testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];holeMatches=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');}catch(e){message(e.message);}};
+
 $('stopCamera').onclick=()=>{stopConveyor();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}$('camera').srcObject=null;$('camera').classList.add('hidden');};window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
 // Încărcare OpenCV cu încercări limitate și mesaje explicite.
 // IMPORTANT: OpenCV rămâne necesar pentru ORB; fără internet la prima deschidere, afișăm EROARE, nu blocăm aplicația.
@@ -839,8 +839,11 @@ setInterval(update,900);update();
   $id('testShowLive').onclick=()=>showTest(true);
   // Camera se pornește doar din Operare.
   $id('testCapture').onclick=()=>{
-    $id('snapCamera').click();
-    showTest(false);
+    try{
+      testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];holeMatches=[];
+      drawTest();result('NEALINIATĂ');showTest(false);
+      message('Fotografie test realizată. Apasă Aliniază automat sau alege reperele P1–P4.');
+    }catch(e){message(e.message);}
   };
   $id('showLive').onclick=()=>{mainLive=true;refresh();};
   $id('showLast').onclick=()=>{mainLive=false;refresh();};
