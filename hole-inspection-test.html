@@ -292,7 +292,7 @@ main .auto-title{display:none}body.menu-visible{overflow:hidden}
 <script>
 'use strict';
 const $=id=>document.getElementById(id), refCanvas=$('refCanvas'),testCanvas=$('testCanvas'),rc=refCanvas.getContext('2d'),tc=testCanvas.getContext('2d');
-let refImg=null,testImg=null,holes=[],refPts=[],testPts=[],clickMode='hole',holeShape='circle',Hmat=null,alignedImage=null,stream=null,cvReady=false,grading=[],lastMode='';
+let refImg=null,testImg=null,holes=[],refPts=[],testPts=[],clickMode='hole',holeShape='circle',Hmat=null,alignedImage=null,stream=null,cvReady=false,grading=[],holeMatches=[],lastMode='';
 let cvFailure='';
 function message(s){$('status').textContent=s;}function result(s,kind='warn'){$('headline').textContent=s;$('headline').className='headline '+kind;}
 function imageOnCanvas(ctx,im){ctx.canvas.width=im.width;ctx.canvas.height=im.height;ctx.drawImage(im,0,0);}
@@ -302,7 +302,42 @@ async function loadImage(file){return await new Promise((resolve,reject)=>{if(!f
 function fitImage(im){const max=1400,s=Math.min(1,max/Math.max(im.naturalWidth||im.width,im.naturalHeight||im.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round((im.naturalWidth||im.width)*s));c.height=Math.max(1,Math.round((im.naturalHeight||im.height)*s));c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c;}
 function drawRef(){if(!refImg){emptyCanvas(rc,'Încarcă piesa-etalon');return;}imageOnCanvas(rc,refImg);holes.forEach((h,i)=>{rc.lineWidth=Math.max(2,rc.canvas.width/500);rc.strokeStyle='#22c55e';rc.fillStyle='#22c55e';if(h.shape==='circle'){rc.beginPath();rc.arc(h.x,h.y,h.r,0,Math.PI*2);rc.stroke()}else rc.strokeRect(h.x-h.r,h.y-h.r,h.r*2,h.r*2);rc.font=`bold ${Math.max(14,rc.canvas.width/65)}px sans-serif`;rc.fillText('H'+String(i+1).padStart(2,'0'),h.x+h.r+4,h.y);});refPts.forEach((p,i)=>pointLabel(rc,p,'P'+(i+1),'#fde047'));updateCounter();}
 function pointLabel(ctx,p,label,color){const sz=Math.max(6,ctx.canvas.width/140);ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,sz,0,Math.PI*2);ctx.fill();ctx.font=`bold ${Math.max(14,ctx.canvas.width/70)}px sans-serif`;ctx.fillText(label,p.x+sz+2,p.y-2);}
-function drawTest(){if(!testImg){emptyCanvas(tc,'Încarcă fotografia de verificat');return;}imageOnCanvas(tc,testImg);testPts.forEach((p,i)=>pointLabel(tc,p,'P'+(i+1),'#fde047'));if(Hmat){holes.forEach((h,i)=>{const p=transformPoint(Hmat,h.x,h.y);if(!p)return;const q=transformPoint(Hmat,h.x+h.r,h.y),r=transformPoint(Hmat,h.x,h.y+h.r);const rr=Math.max(4,Math.hypot(q.x-p.x,q.y-p.y));const ry=Math.max(4,Math.hypot(r.x-p.x,r.y-p.y));const color=grading[i]==='OK'?'#22c55e':grading[i]==='NOK'?'#fb4b4b':'#fbbf24';tc.lineWidth=Math.max(2,tc.canvas.width/450);tc.strokeStyle=color;tc.fillStyle=color;tc.beginPath();tc.ellipse(p.x,p.y,rr,ry,0,0,Math.PI*2);tc.stroke();tc.font=`bold ${Math.max(13,tc.canvas.width/70)}px sans-serif`;tc.fillText('H'+String(i+1).padStart(2,'0'),p.x+rr+3,p.y);});}}
+
+function drawTest(){
+ if(!testImg){emptyCanvas(tc,'Încarcă fotografia de verificat');return;}
+ imageOnCanvas(tc,testImg);
+ testPts.forEach((p,i)=>pointLabel(tc,p,'P'+(i+1),'#fde047'));
+ if(!Hmat)return;
+ holes.forEach((h,i)=>{
+  const center=transformPoint(Hmat,h.x,h.y);
+  if(!center||!Number.isFinite(center.x)||!Number.isFinite(center.y))return;
+  const color=grading[i]==='OK'?'#34db8b':grading[i]==='NOK'?'#f87171':'#ffcb45';
+  tc.strokeStyle=color;tc.fillStyle=color;tc.lineWidth=Math.max(2,tc.canvas.width/500);
+  tc.beginPath();
+  const count=h.shape==='circle'?36:4;
+  for(let k=0;k<=count;k++){
+   const t=(k%count)*Math.PI*2/count;
+   const dx=h.shape==='circle'?Math.cos(t)*h.r:(k%4===0||k%4===3?-h.r:h.r);
+   const dy=h.shape==='circle'?Math.sin(t)*h.r:(k%4<2?-h.r:h.r);
+   const p=transformPoint(Hmat,h.x+dx,h.y+dy);
+   if(!p)continue;
+   if(k===0)tc.moveTo(p.x,p.y);else tc.lineTo(p.x,p.y);
+  }
+  tc.closePath();tc.stroke();
+  const candidate=holeMatches[i];
+  if(candidate&&grading[i]==='OK'){
+   const q=transformPoint(Hmat,candidate.x,candidate.y);
+   if(q&&Number.isFinite(q.x)&&Number.isFinite(q.y)){
+    tc.strokeStyle='#eafcff';tc.lineWidth=Math.max(1.5,tc.canvas.width/700);
+    tc.beginPath();tc.moveTo(center.x,center.y);tc.lineTo(q.x,q.y);tc.stroke();
+    tc.fillStyle='#22e891';tc.beginPath();tc.arc(q.x,q.y,Math.max(3,tc.canvas.width/220),0,Math.PI*2);tc.fill();
+    tc.strokeStyle='#f4ffff';tc.lineWidth=1.2;tc.stroke();
+   }
+  }
+  tc.fillStyle=color;tc.font='bold '+Math.max(14,tc.canvas.width/70)+'px sans-serif';
+  tc.fillText('H'+String(i+1).padStart(2,'0'),center.x+h.r+4,center.y);
+ });
+}
 function updateCounter(){ $('expected').textContent=holes.length;$('refCount').textContent=holes.length+' găuri definite';$('holeList').innerHTML='';holes.forEach((h,i)=>{const d=document.createElement('div');d.className='hole';const s=document.createElement('span');s.textContent='H'+String(i+1).padStart(2,'0')+' · '+(h.shape==='circle'?'rotundă':'decupaj')+' · '+Math.round(h.r*2)+' px';const b=document.createElement('button');b.textContent='✕';b.title='Șterge această gaură';b.onclick=()=>{holes.splice(i,1);grading=[];Hmat=null;alignedImage=null;drawRef();drawTest();};d.append(s,b);if(grading[i]){const chip=document.createElement('b');chip.className='chip '+(grading[i]==='OK'?'ok':'nok');chip.textContent=grading[i];d.append(chip);}$('holeList').append(d);});}
 // Transformare corectă pentru canvas afișat cu object-fit: contain.
 // Benzile negre (letterboxing) sunt excluse din zona selectabilă.
@@ -337,7 +372,7 @@ $('radius').oninput=()=>{$('radiusLabel').textContent=$('radius').value};
 $('undo').onclick=()=>{holes.pop();grading=[];drawRef();drawTest();};
 $('clearModel').onclick=()=>{if(!confirm('Ștergi etalonul și găurile definite?'))return;refImg=null;holes=[];refPts=[];Hmat=null;alignedImage=null;grading=[];localStorage.removeItem('bdi_holes_v1');drawRef();drawTest();updateCounter();result('AȘTEPTARE ETALON');message('Etalon șters.');};
 function setReferenceImage(source){
- refImg=fitImage(source);holes=[];refPts=[];grading=[];Hmat=null;alignedImage=null;
+ refImg=fitImage(source);holes=[];refPts=[];grading=[];holeMatches=[];Hmat=null;alignedImage=null;
  drawRef();drawTest();result('MARCAȚI GĂURILE');
  message('Etalon actualizat. Selectează fotografia etalon, marchează toate găurile și apasă Salvează.');
  if(typeof showReferencePhoto==='function')showReferencePhoto(true);
@@ -498,17 +533,29 @@ $('autoAlign').onclick=async()=>{
 function pixelValue(img,x,y){const i=(y*img.width+x)*4;return .299*img.data[i]+.587*img.data[i+1]+.114*img.data[i+2];}
 function sampleHole(img,h){const x0=Math.max(0,Math.floor(h.x-h.r*2.25)),x1=Math.min(img.width-1,Math.ceil(h.x+h.r*2.25)),y0=Math.max(0,Math.floor(h.y-h.r*2.25)),y1=Math.min(img.height-1,Math.ceil(h.y+h.r*2.25));let ins=0,out=0,ni=0,no=0,missing=0;const r=h.r;for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const dx=x-h.x,dy=y-h.y;const dist=h.shape==='circle'?Math.hypot(dx,dy):Math.max(Math.abs(dx),Math.abs(dy));const v=(y*img.width+x)*4;if(!img.data[v+3]){if(dist<r*.7)missing++;continue;}const lum=pixelValue(img,x,y);if(dist<=r*.7){ins+=lum;ni++;}else if(dist>=r*1.25&&dist<=r*1.9){out+=lum;no++;}}if(ni<5||no<10||missing>ni*.35)return null;return {inside:ins/ni,outside:out/no,delta:ins/ni-out/no};}
 function canvasPixels(c){const ctx=c.getContext('2d');return{width:c.width,height:c.height,data:ctx.getImageData(0,0,c.width,c.height).data};}
-$('run').onclick=()=>{if(!refImg||!testImg||!holes.length){message('Trebuie etalon, test și cel puțin o gaură.');return;}if(!Hmat||!alignedImage){message('Aliniază mai întâi fotografia test cu etalonul.');return;}const c=document.createElement('canvas');imageOnCanvas(c.getContext('2d'),refImg);const ref=canvasPixels(c);const req=Number($('minRatio').value)/100,minC=Number($('contrast').value),polarity=$('polarity').value;let ok=0,nok=0,uncertain=0;grading=[];const details=[];
-holes.forEach((h,i)=>{const a=sampleHole(ref,h),b=sampleHole(alignedImage,h);let state='NOK',why='';if(!a||!b){state='INCERT';why='Gaura în afara cadrului / imagine insuficientă';uncertain++;}
-else{const direction=polarity==='dark'?-1:polarity==='bright'?1:Math.sign(a.delta)||-1;const refContrast=direction*a.delta,actual=direction*b.delta;if(refContrast<minC){state='INCERT';why='Etalon cu contrast insuficient ('+refContrast.toFixed(1)+')';uncertain++;}else if(actual>=Math.max(minC*.65,refContrast*req)){state='OK';why='Contrast '+actual.toFixed(1)+' vs etalon '+refContrast.toFixed(1);ok++;}else{state='NOK';why='Contrast insuficient '+actual.toFixed(1)+' vs '+refContrast.toFixed(1);nok++;}}
-grading.push(state);details.push('H'+String(i+1).padStart(2,'0')+': '+state+' — '+why);});$('ok').textContent=ok;$('nok').textContent=nok;drawTest();updateCounter();if(uncertain)result('NECONCLUDENT – '+uncertain+' GĂURI','warn');else if(nok)result('NOK – '+nok+' GĂURI','bad');else result('OK – TOATE '+ok+' GĂURILE','good');message(details.join(' | '));$('status').title=details.join('\n');};
+$('run').onclick=()=>{if(!refImg||!testImg||!holes.length){message('Trebuie etalon, test și cel puțin o gaură.');return;}if(!Hmat||!alignedImage){message('Aliniază mai întâi fotografia test cu etalonul.');return;}const c=document.createElement('canvas');imageOnCanvas(c.getContext('2d'),refImg);const ref=canvasPixels(c);const req=Number($('minRatio').value)/100,minC=Number($('contrast').value),polarity=$('polarity').value;let ok=0,nok=0,uncertain=0;grading=[];holeMatches=[];const details=[];
+holes.forEach((h,i)=>{const a=sampleHole(ref,h),b=sampleHole(alignedImage,h);let state='NOK',why='';let centerCandidate=null;if(!a||!b){state='INCERT';why='Gaura în afara cadrului / imagine insuficientă';uncertain++;}
+else{const direction=polarity==='dark'?-1:polarity==='bright'?1:Math.sign(a.delta)||-1;const refContrast=direction*a.delta,actual=direction*b.delta;if(refContrast<minC){state='INCERT';why='Etalon cu contrast insuficient ('+refContrast.toFixed(1)+')';uncertain++;}else if(actual>=Math.max(minC*.65,refContrast*req)){state='OK';why='Contrast '+actual.toFixed(1)+' vs etalon '+refContrast.toFixed(1);ok++;
+  // Căutare locală numai pentru vizualizare: deplasare mică în jurul poziției așteptate.
+  // Nu schimbă verdictul OK/NOK. Nu este măsurare metrologică a centrului găurii.
+  let best=actual;
+  const shift=Math.min(8,Math.floor(h.r*.40));
+  for(let sy=-shift;sy<=shift;sy+=2)for(let sx=-shift;sx<=shift;sx+=2){
+   const shifted=sampleHole(alignedImage,{...h,x:h.x+sx,y:h.y+sy});
+   if(!shifted)continue;
+   const score=direction*shifted.delta;
+   if(score>best){best=score;centerCandidate={x:h.x+sx,y:h.y+sy};}
+  }
+  if(!centerCandidate)centerCandidate={x:h.x,y:h.y};
+ }else{state='NOK';why='Contrast insuficient '+actual.toFixed(1)+' vs '+refContrast.toFixed(1);nok++;}}
+grading.push(state);holeMatches.push(centerCandidate);details.push('H'+String(i+1).padStart(2,'0')+': '+state+' — '+why);});$('ok').textContent=ok;$('nok').textContent=nok;drawTest();updateCounter();if(uncertain)result('NECONCLUDENT – '+uncertain+' GĂURI','warn');else if(nok)result('NOK – '+nok+' GĂURI','bad');else result('OK – TOATE '+ok+' GĂURILE','good');message(details.join(' | '));$('status').title=details.join('\n');};
 for(const id of ['minRatio','contrast'])$(id).oninput=()=>{$(id==='minRatio'?'minRatioOut':'contrastOut').textContent=$(id).value+(id==='minRatio'?'%':'');};
 function serializeModel(){if(!refImg||!holes.length)throw Error('Nu ai etalon și găuri definite.');return{v:1,holes,refData:refImg.toDataURL('image/jpeg',.85)}}
 $('saveModel').onclick=()=>{try{const o=serializeModel();localStorage.setItem('bdi_holes_v1',JSON.stringify(o));message('Etalon salvat local pe acest dispozitiv.');feedback('Etalon salvat: '+holes.length+' poziții definite.','success');}catch(e){message('Nu pot salva: '+e.message+' (fotografia poate fi prea mare).')}};
 try{const model=JSON.parse(localStorage.getItem('bdi_holes_v1')||'null');if(model?.refData){const im=new Image();im.onload=()=>{refImg=fitImage(im);holes=model.holes||[];drawRef();message('Etalonul salvat anterior a fost încărcat.');result('ETALON ÎNCĂRCAT','warn');};im.src=model.refData;}}catch(e){message('Etalonul salvat nu poate fi citit.');}
 $('startCamera').onclick=async()=>{if(stream&&$('camera').videoWidth){message('Camera este deja pornită.');return;}try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});$('camera').srcObject=stream;$('camera').classList.remove('hidden');await $('camera').play();message('Camera este pornită. Poți fotografia etalonul, calibra banda sau verifica piesa actuală.');}catch(e){message('Camera nu poate porni: '+e.message);}};
 function cameraSnapshot(){const v=$('camera');if(!stream||!v.videoWidth)throw Error('Pornește camera mai întâi.');const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);return c;}
-$('snapCamera').onclick=()=>{try{testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');}catch(e){message(e.message);}};
+$('snapCamera').onclick=()=>{try{testImg=fitImage(cameraSnapshot());testPts=[];Hmat=null;alignedImage=null;grading=[];holeMatches=[];drawTest();result('NEALINIATĂ');message('Imagine capturată. Apasă Aliniază automat.');}catch(e){message(e.message);}};
 $('stopCamera').onclick=()=>{stopConveyor();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}$('camera').srcObject=null;$('camera').classList.add('hidden');};window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
 // Încărcare OpenCV cu încercări limitate și mesaje explicite.
 // IMPORTANT: OpenCV rămâne necesar pentru ORB; fără internet la prima deschidere, afișăm EROARE, nu blocăm aplicația.
@@ -587,7 +634,7 @@ function captureMotion(){const v=$('camera');if(!stream||!v.videoWidth)return nu
 // O zonă centrală, fără margini, evită suprapuneri cu marginile cadrului.
 function frameDistance(a,b){if(!a||!b)return {avg:999,ratio:1};let sum=0,changed=0,n=0;for(let y=12;y<108;y+=2)for(let x=12;x<148;x+=2){const k=y*160+x,d=Math.abs(a[k]-b[k]);sum+=d;n++;if(d>24)changed++;}return {avg:sum/n,ratio:changed/n};}
 function captureWorkFrame(){const v=$('camera');const c=document.createElement('canvas');const max=1200,s=Math.min(1,max/Math.max(v.videoWidth,v.videoHeight));c.width=Math.max(1,Math.round(v.videoWidth*s));c.height=Math.max(1,Math.round(v.videoHeight*s));c.getContext('2d').drawImage(v,0,0,c.width,c.height);return c;}
-function resetRecognition(){Hmat=null;alignedImage=null;grading=[];}
+function resetRecognition(){Hmat=null;alignedImage=null;grading=[];holeMatches=[];}
 function resetCountsConfirm(){if(!confirm('Resetezi numărul de piese inspectate?'))return;pieceCounts={total:0,ok:0,nok:0,unknown:0};updatePieceNumbers();}
 $('resetPieces').onclick=resetCountsConfirm;
 $('arrival').oninput=()=>{$('arrivalOut').textContent=$('arrival').value+'%';};
